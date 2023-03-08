@@ -1,0 +1,2 @@
+#org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+# com.kelven.oss.export.autoconfig.OssAutoConfiguration
