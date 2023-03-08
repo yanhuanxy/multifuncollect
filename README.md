@@ -10,6 +10,7 @@ For further reference, please consider the following sections:
 
 ### 各类工具、功能、示例集合
 * 1、根据配置信息 基于poi文件数据上传
-* 2、线程的demo 
-* 3、等等
+* 2、线程的demo
+* 3、文件上传插件 
+* 4、等等
 # 功能信息还在增加 详情以后再说
