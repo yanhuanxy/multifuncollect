@@ -1,4 +1,4 @@
-package com.yanhuanxy.multifunexport.fileservice.util;
+package com.yanhuanxy.multifunexport.tools.util;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.FastByteArrayOutputStream;

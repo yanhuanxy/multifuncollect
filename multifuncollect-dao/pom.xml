@@ -5,18 +5,35 @@
     <parent>
         <groupId>com.yanhuanxy</groupId>
         <artifactId>multifuncollect</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>1.0.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>multifuncollect-dao</artifactId>
     <description>数据库访问相关</description>
 
     <dependencies>
+        <!-- 本项目其他模块引用 -->
+        <dependency>
+            <groupId>com.yanhuanxy</groupId>
+            <artifactId>multifuncollect-common</artifactId>
+            <version>1.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- druid-starter -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+        </dependency>
         <!-- mysql-driver -->
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
             <scope>runtime</scope>
+        </dependency>
+        <!-- Redis -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
     </dependencies>
 </project>

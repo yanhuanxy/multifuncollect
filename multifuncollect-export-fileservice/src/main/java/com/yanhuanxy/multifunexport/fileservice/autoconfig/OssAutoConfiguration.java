@@ -5,7 +5,7 @@ import com.yanhuanxy.multifunexport.fileservice.operation.InitMinioClient;
 import com.yanhuanxy.multifunexport.fileservice.operation.MinioClientUtil;
 import com.yanhuanxy.multifunexport.fileservice.util.OssRedisLock;
 import com.yanhuanxy.multifunexport.fileservice.util.OssUtils;
-import com.yanhuanxy.multifunexport.fileservice.util.RedisUtil;
+import com.yanhuanxy.multifunexport.tools.redis.RedisUtil;
 import io.minio.MinioClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

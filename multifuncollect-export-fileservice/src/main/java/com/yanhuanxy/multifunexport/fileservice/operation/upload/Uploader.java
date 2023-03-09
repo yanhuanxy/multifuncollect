@@ -6,11 +6,10 @@ import com.yanhuanxy.multifunexport.fileservice.exception.operation.UploadExcept
 import com.yanhuanxy.multifunexport.fileservice.operation.upload.request.OssMultipartFile;
 import com.yanhuanxy.multifunexport.fileservice.util.HttpServletRequestToContext;
 import com.yanhuanxy.multifunexport.fileservice.util.OssRedisLock;
-import com.yanhuanxy.multifunexport.fileservice.util.RedisUtil;
+import com.yanhuanxy.multifunexport.tools.redis.RedisUtil;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.compress.utils.IOUtils;
-import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;

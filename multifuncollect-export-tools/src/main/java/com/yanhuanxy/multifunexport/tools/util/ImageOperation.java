@@ -1,4 +1,4 @@
-package com.yanhuanxy.multifunexport.fileservice.util;
+package com.yanhuanxy.multifunexport.tools.util;
 
 import net.coobird.thumbnailator.Thumbnails;
 import net.coobird.thumbnailator.geometry.Positions;

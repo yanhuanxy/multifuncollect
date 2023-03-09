@@ -8,51 +8,109 @@
         <version>3.0.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
+
     <groupId>com.yanhuanxy</groupId>
     <artifactId>multifuncollect</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
     <name>multifuncollect</name>
     <description>yanhuan 的自定义项目</description>
 
     <!-- 子模块 -->
     <modules>
         <module>multifuncollect-api</module>
-        <module>multifuncollect-common</module>
         <module>multifuncollect-domain</module>
+        <module>multifuncollect-common</module>
         <module>multifuncollect-dao</module>
         <module>multifuncollect-service</module>
         <module>multifuncollect-web</module>
         <!-- 插件模块 -->
         <module>multifuncollect-export-fileservice</module>
+        <!-- 工具模块 -->
+        <module>multifuncollect-export-tools</module>
     </modules>
 
     <!-- 打包方式：父模块默认为pom -->
     <packaging>pom</packaging>
 
-
     <properties>
         <java.version>17</java.version>
+        <mybatis-plus-starter.version>3.5.3.1</mybatis-plus-starter.version>
+        <dynamic-datasource-starter.version>3.5.1</dynamic-datasource-starter.version>
+        <druid-starter.version>1.2.14</druid-starter.version>
+        <commons-lang3.version>3.12.0</commons-lang3.version>
+        <commons-compress.version>1.21</commons-compress.version>
+        <commons-io.version>2.11.0</commons-io.version>
+        <junrar.version>7.4.1</junrar.version>
+        <jackson.version>2.14.1</jackson.version>
+        <guava.version>30.1.1-jre</guava.version>
     </properties>
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-        </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
+    <dependencyManagement>
+        <dependencies>
+            <!-- mybatis-plus-starter -->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis-plus-starter.version}</version>
+            </dependency>
+           <!-- <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
+                <version>${dynamic-datasource-starter.version}</version>
+            </dependency>-->
 
+            <!-- druid-starter -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-starter</artifactId>
+                <version>${druid-starter.version}</version>
+            </dependency>
+
+            <!-- apache工具包 -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons-lang3.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-compress</artifactId>
+                <version>${commons-compress.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.junrar</groupId>
+                <artifactId>junrar</artifactId>
+                <version>${junrar.version}</version>
+            </dependency>
+            <!-- jackson -->
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>

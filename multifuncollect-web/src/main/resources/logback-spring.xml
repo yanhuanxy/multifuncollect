@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- logback配置
+    1. 生产环境禁止输出日志到控制台
+       注释 <appender-ref ref="STDOUT" /> 即可
+    2. 配置包日志
+       配置logger标签即可，name字段为包全路径，lever可控制日志等级
+    3. 生产环境下不停机更新日志配置
+       scanPeriod：设置监测配置文件是否有修改的时间间隔，如果没有给出时间单位，默认单位是毫秒。当scan为true时，此属性生效
+-->
+<configuration scan="true" scanPeriod="60000">
+
+    <!-- Basic log dir, name config -->
+    <property name="LOG_HOME" value="./logs/"/>
+
+    <appender name="TRACE_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/trace/trace.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <FileNamePattern>${LOG_HOME}/trace/history/%d{yyyy-MM-dd}/%i.log</FileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
+            <MaxHistory>30</MaxHistory>
+        </rollingPolicy>
+        <layout>
+            <pattern>[%date{yyyy-MM-dd HH:mm:ss}] [%-5level] [%logger:%line] --%mdc{client} %msg%n</pattern>
+        </layout>
+        <!--  <filter class="ch.qos.logback.classic.filter.LevelFilter">
+             <level>TRACE</level>
+             <onMatch>ACCEPT</onMatch>
+             <onMismatch>DENY</onMismatch>
+            </filter>  -->
+    </appender>
+
+    <appender name="INFO_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/info/info.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <FileNamePattern>${LOG_HOME}/info/history/%d{yyyy-MM-dd}/%i.log</FileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
+            <MaxHistory>30</MaxHistory>
+        </rollingPolicy>
+        <layout>
+            <pattern>[%date{yyyy-MM-dd HH:mm:ss}] [%-5level] [%logger:%line] --%mdc{client} %msg%n</pattern>
+        </layout>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <appender name="DEBUG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/debug/debug.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <FileNamePattern>${LOG_HOME}/debug/history/%d{yyyy-MM-dd}/%i.log</FileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
+            <MaxHistory>30</MaxHistory>
+        </rollingPolicy>
+        <layout>
+            <pattern>[%date{yyyy-MM-dd HH:mm:ss}] [%-5level] [%logger:%line] --%mdc{client} %msg%n</pattern>
+        </layout>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>DEBUG</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+
+    <appender name="WARN_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/warn/warn.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <FileNamePattern>${LOG_HOME}/warn/history/%d{yyyy-MM-dd}/%i.log</FileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
+            <MaxHistory>30</MaxHistory>
+        </rollingPolicy>
+        <layout>
+            <pattern>[%date{yyyy-MM-dd HH:mm:ss}] [%-5level] [%logger:%line] --%mdc{client} %msg%n</pattern>
+        </layout>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>WARN</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+
+
+    <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/error/error.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <FileNamePattern>${LOG_HOME}/error/history/%d{yyyy-MM-dd}/%i.log</FileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
+            <MaxHistory>30</MaxHistory>
+        </rollingPolicy>
+
+        <layout>
+            <pattern>[%date{yyyy-MM-dd HH:mm:ss}] [%-5level] [%logger:%line] --%mdc{client} %msg%n</pattern>
+        </layout>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+    <!-- 控制台输出 不需要修改 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度,%msg：日志消息，%n是换行符-->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS}  %highlight(%-5level) %magenta([%-15.15(%thread)])  %cyan( %-50.50(%logger{50} )) : %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- mybatis 打印sql日志 -->
+    <logger name="com.yanhuanxy.multifundao" level="DEBUG"></logger>
+
+    <springProfile name="!prod">
+        <root level="INFO">
+            <appender-ref ref="STDOUT" />
+            <appender-ref ref="TRACE_FILE" />
+            <appender-ref ref="INFO_FILE" />
+            <appender-ref ref="DEBUG_FILE" />
+            <appender-ref ref="WARN_FILE" />
+            <appender-ref ref="ERROR_FILE" />
+        </root>
+    </springProfile>
+
+    <springProfile name="prod">
+        <root level="INFO">
+            <appender-ref ref="WARN_FILE" />
+            <appender-ref ref="ERROR_FILE" />
+        </root>
+    </springProfile>
+</configuration>

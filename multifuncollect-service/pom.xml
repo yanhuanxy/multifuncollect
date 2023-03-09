@@ -5,16 +5,24 @@
     <parent>
         <groupId>com.yanhuanxy</groupId>
         <artifactId>multifuncollect</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>1.0.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>multifuncollect-service</artifactId>
     <description>业务服务相关</description>
 
     <dependencies>
+        <!-- 本项目其他模块引用 -->
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
+            <groupId>com.yanhuanxy</groupId>
+            <artifactId>multifuncollect-dao</artifactId>
+            <version>1.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.yanhuanxy</groupId>
+            <artifactId>multifuncollect-export-fileservice</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

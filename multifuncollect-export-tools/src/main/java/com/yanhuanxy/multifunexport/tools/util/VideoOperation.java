@@ -1,4 +1,4 @@
-package com.yanhuanxy.multifunexport.fileservice.util;//package com.kelven.oss.export.util;
+package com.yanhuanxy.multifunexport.tools.util;//package com.kelven.oss.export.util;
 //
 //import com.kelven.oss.export.exception.OssException;
 //import org.apache.commons.io.FileUtils;

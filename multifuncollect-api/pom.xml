@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.yanhuanxy</groupId>
         <artifactId>multifuncollect</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>1.0.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>multifuncollect-api</artifactId>
