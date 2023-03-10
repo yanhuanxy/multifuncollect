@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yanhuanx.excelupload.mapper.DesFormDataBatchUploadMapper">
+
+	<insert id="insertDataBatch" >
+		INSERT ALL
+		<foreach collection="dataList" item="data">
+			INTO ${tableName}
+			<foreach collection="data.columns" item="column" open="(" close=")" separator=",">
+				"${column}"
+			</foreach>
+			 VALUES
+			<foreach collection="data.values" item="value" open="(" close=")" separator=",">
+				#{value}
+			</foreach>
+		</foreach>
+		SELECT * FROM dual
+	</insert>
+
+	<select id="getPrimaryKey" resultType="java.lang.String">
+		select * from (Select  col.column_name
+					   from
+						   all_constraints con,all_cons_columns col
+					   where
+						   con.constraint_name=col.constraint_name and con.constraint_type='P'
+						 and col.table_name=#{tableName}) where rownum=1
+	</select>
+
+	<select id="getColumns" resultType="com.yanhuanx.excelupload.dto.desfrom.DesTableColumnDTO">
+		select COLUMN_NAME as columnName,DATA_TYPE as dataType from user_tab_columns where Table_Name=#{tableName}
+	</select>
+	<select id="findTable" resultType="java.lang.Integer">
+		select count(*) from user_tables where table_name =upper(#{tableName})
+	</select>
+	<select id="getAllColumns"
+					resultType="com.yanhuanx.excelupload.dto.desfrom.DesTableColumnDTO">
+		select COLUMN_NAME as columnName,DATA_TYPE as dataType from all_tab_columns where Table_Name = #{tableName} AND OWNER = #{owner}
+	</select>
+	<select id="getPrimaryUserKey" resultType="java.lang.String">
+		select * from (Select  col.column_name
+					   from
+						   all_constraints con,all_cons_columns col
+					   where
+						   con.constraint_name=col.constraint_name and con.constraint_type='P'
+						 and col.table_name=#{tableName} and con.owner = #{user}) where rownum=1
+	</select>
+	<insert id="increaseAmountUpload">
+		insert into  ${oldTableName} select * from ${newTableName}  where ${primaryKey} not in (select ${primaryKey} from  ${oldTableName})
+	</insert>
+
+	<update id="createTempTable">
+		create table ${newTableName} nologging as select * from ${oldTableName} where 2=1
+	</update>
+
+	<delete id="deleteNewTableNotInOldTable">
+		delete from ${newTableName} where ${primaryKey} not in (select ${primaryKey} from  ${oldTableName})
+	</delete>
+	<delete id="deleteOldTableInNewTable">
+		delete from ${oldTableName} where ${primaryKey} in (select ${primaryKey} from  ${newTableName})
+	</delete>
+
+	<insert id="updateTable">
+		insert into  ${oldTableName} select * from ${newTableName}
+	</insert>
+
+	<insert id="dropTable">
+		drop table ${tableName} purge
+	</insert>
+
+	<delete id="deleteAll">
+		delete from ${tableName}
+	</delete>
+
+	<select id="queryListDataSql" resultType="java.util.Map">
+		<choose>
+			<when test="tableName != null">
+				SELECT count(1) FROM ${tableName}
+				<if test="uploadDate != null ">
+					where CUR_UPLOAD_DATE = #{uploadDate}
+				</if>
+			</when>
+			<otherwise>
+				SELECT 0 FROM dual 1=0;
+			</otherwise>
+		</choose>
+	</select>
+
+	<delete id="delListDataSql" >
+		delete from ${tableName} where ${uploadDateFile} = #{uploadDate}
+	</delete>
+</mapper>
