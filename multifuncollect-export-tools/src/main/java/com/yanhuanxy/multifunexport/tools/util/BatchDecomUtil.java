@@ -516,7 +516,6 @@ public class BatchDecomUtil {
 
     /**
      * 获取文件真实类型
-     *
      * @param file 要获取类型的文件。
      * @return 文件类型枚举。
      */
@@ -533,22 +532,15 @@ public class BatchDecomUtil {
                 headHex <<= 8;
                 headHex |= b;
             }
-            switch (headHex) {
-                case 0x504B0304:
-                    return BatchCompressorEnums.ZIP;
-                case 0x776f7264:
-                    return BatchCompressorEnums.TAR;
-                case -0x51:
-                    return BatchCompressorEnums.SEVERNZ;
-                case 0x425a6839:
-                    return BatchCompressorEnums.BZ2;
-                case -0x74f7f8:
-                    return BatchCompressorEnums.GZ;
-                case 0x52617221:
-                    return BatchCompressorEnums.RAR;
-                default:
-                    return BatchCompressorEnums.UNKNOWN;
-            }
+            return switch (headHex) {
+                case 0x504B0304 -> BatchCompressorEnums.ZIP;
+                case 0x776f7264 -> BatchCompressorEnums.TAR;
+                case -0x51 -> BatchCompressorEnums.SEVERNZ;
+                case 0x425a6839 -> BatchCompressorEnums.BZ2;
+                case -0x74f7f8 -> BatchCompressorEnums.GZ;
+                case 0x52617221 -> BatchCompressorEnums.RAR;
+                default -> BatchCompressorEnums.UNKNOWN;
+            };
         }catch (Exception e){
             logger.error("探嗅文件类型失败！", e);
         }finally {
