@@ -13,6 +13,6 @@ For further reference, please consider the following sections:
 * 2、线程的demo
 * 3、文件上传插件
 * 4、excel poi事件模式数据读取工具、添加水印
-  5、多数据源工具
-* 5、等等
+* 5、多数据源工具
+* 6、等等
 # 功能信息还在增加 详情以后再说
