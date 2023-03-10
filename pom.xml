@@ -43,6 +43,7 @@
         <junrar.version>7.4.1</junrar.version>
         <jackson.version>2.14.1</jackson.version>
         <guava.version>30.1.1-jre</guava.version>
+        <gson.vsersion>2.10</gson.vsersion>
     </properties>
 
 
@@ -110,6 +111,13 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
+            </dependency>
+
+            <!-- gson -->
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>${gson.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
