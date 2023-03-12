@@ -1,12 +1,10 @@
 package com.yanhuanxy.multifunexport.fileservice.dto;
 
-import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
 public class OssUserDTO  implements Serializable {
 
-    @Serial
     private static final long serialVersionUID = 14455444L;
 
     private Long id;

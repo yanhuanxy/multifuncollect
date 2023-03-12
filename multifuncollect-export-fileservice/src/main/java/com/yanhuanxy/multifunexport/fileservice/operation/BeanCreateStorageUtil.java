@@ -20,7 +20,7 @@ public class BeanCreateStorageUtil<T> {
 
     public T initCreateBeanByStorageType(StorageTypeEnums storageTypeEnums, FileOperationType fileOperationType){
         try {
-            StringBuilder classNameBuf = new StringBuilder("com.kelven.oss.export.operation.");
+            StringBuilder classNameBuf = new StringBuilder("com.yanhuanxy.multifunexport.fileservice.operation.");
             classNameBuf.append(fileOperationType.toString().toLowerCase()).append(".product.");
             if(Objects.isNull(storageTypeEnums)){
                 storageTypeEnums = StorageTypeEnums.LOCAL;

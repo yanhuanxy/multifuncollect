@@ -1,12 +1,10 @@
 package com.yanhuanxy.multifunexport.fileservice.dto;
 
-import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
 public class OssBucketDTO  implements Serializable {
 
-    @Serial
     private static final long serialVersionUID = 14455447L;
 
     private Long id;

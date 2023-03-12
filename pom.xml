@@ -27,6 +27,8 @@
         <module>multifuncollect-export-fileservice</module>
         <!-- 工具模块 -->
         <module>multifuncollect-export-tools</module>
+        <!-- 学习demo -->
+        <module>multifuncollect-export-learndemo</module>
     </modules>
 
     <!-- 打包方式：父模块默认为pom -->
