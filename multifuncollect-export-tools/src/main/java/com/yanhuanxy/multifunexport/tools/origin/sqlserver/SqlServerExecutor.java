@@ -1,10 +1,10 @@
 package com.yanhuanxy.multifunexport.tools.origin.sqlserver;
 
-import com.yanhuanxy.multifunexport.tools.origin.base.executor.BaseSQLExecutor;
-import com.yanhuanxy.multifunexport.tools.origin.base.executor.SQLExecutorInterface;
 import com.yanhuanxy.multifunexport.tools.domain.origin.dto.AlterTableDto;
 import com.yanhuanxy.multifunexport.tools.domain.origin.dto.ColumnInfoDto;
-import com.yanhuanxy.multifunexport.tools.domain.origin.dto.DcDataSourceDto;
+import com.yanhuanxy.multifunexport.tools.origin.base.connection.InitDataSourceConnection;
+import com.yanhuanxy.multifunexport.tools.origin.base.executor.BaseSqlExecutor;
+import com.yanhuanxy.multifunexport.tools.origin.base.executor.SqlExecutorInterface;
 import com.yanhuanxy.multifunexport.tools.util.origin.JdbcUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -22,26 +22,13 @@ import java.util.Map;
  * @author yym
  * @since 2020/08/27
  */
-public class SqlServerSqlExecutor extends BaseSQLExecutor implements SQLExecutorInterface {
+public class SqlServerExecutor extends BaseSqlExecutor implements SqlExecutorInterface {
 
-    public SqlServerSqlExecutor(DcDataSourceDto dcDataSourceDto) throws SQLException {
+    public SqlServerExecutor(InitDataSourceConnection dcDataSourceDto) {
         super(dcDataSourceDto);
     }
 
-    public SqlServerSqlExecutor(DcDataSourceDto dcDataSourceDto,Boolean localCache) throws SQLException {
-        super(dcDataSourceDto,localCache);
-    }
 
-    @Override
-    public List<Map<String, Object>> getTableNamesComment() {
-        List<Map<String, Object>> res = null;
-        try {
-            res = JdbcUtils.executeQuery(getConnection(), getSqlQueryTablesNameComments(), null);
-        } catch (SQLException e) {
-            logger.error("[getTableNamesComment Exception] --> the exception message is:{}",e.getMessage());
-        }
-        return res;
-    }
 
     /**
      * 检查 是否有注解
@@ -54,7 +41,7 @@ public class SqlServerSqlExecutor extends BaseSQLExecutor implements SQLExecutor
         boolean flag = !StringUtils.isBlank(columnName);
         String checkTableCommentExistsSql = checkTableCommentExistsSql(flag);
         try {
-            stmt = getConnection().prepareStatement(checkTableCommentExistsSql);
+            stmt = connection.prepareStatement(checkTableCommentExistsSql);
             stmt.setString(1,tableName);
             if(flag){
                 stmt.setString(2,columnName);
@@ -89,7 +76,7 @@ public class SqlServerSqlExecutor extends BaseSQLExecutor implements SQLExecutor
         Statement stmt = null;
         boolean issuccess = true;
         try {
-            stmt = getConnection().createStatement();
+            stmt = connection.createStatement();
             stmt.executeUpdate(sqlupdateTableComment);
         } catch (SQLException e) {
             issuccess = false;
@@ -125,7 +112,7 @@ public class SqlServerSqlExecutor extends BaseSQLExecutor implements SQLExecutor
         Statement stmt = null;
         boolean issuccess = true;
         try {
-            stmt = getConnection().createStatement();
+            stmt = connection.createStatement();
             stmt.executeUpdate(sqlupdateTableColumnComment);
         } catch (SQLException e) {
             issuccess = false;
@@ -154,10 +141,10 @@ public class SqlServerSqlExecutor extends BaseSQLExecutor implements SQLExecutor
 
     @Override
     public List<ColumnInfoDto> getSqlTableDesc(String tableName) {
-        String sql = getSqlTableDescCmd(tableName,currentSchema);
+        String sql = sqlBuilder.getSqlTableDesc(tableName,currentSchema);
         List<ColumnInfoDto> result = new ArrayList<>();
         try {
-            List<Map<String, Object>> maps = JdbcUtils.executeQuery(getConnection(), sql,null);
+            List<Map<String, Object>> maps = JdbcUtils.executeQuery(connection, sql,null);
             if(maps.size() > 0){
                 maps.forEach(item->{
                     ColumnInfoDto columnInfoDto = new ColumnInfoDto();

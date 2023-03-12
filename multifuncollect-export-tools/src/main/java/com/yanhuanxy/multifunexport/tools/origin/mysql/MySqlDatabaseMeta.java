@@ -1,9 +1,9 @@
 package com.yanhuanxy.multifunexport.tools.origin.mysql;
 
 
+import com.yanhuanxy.multifunexport.tools.domain.origin.dto.AlterTableDto;
 import com.yanhuanxy.multifunexport.tools.origin.base.meta.BaseDatabaseMeta;
 import com.yanhuanxy.multifunexport.tools.origin.base.meta.DatabaseInterface;
-import com.yanhuanxy.multifunexport.tools.domain.origin.dto.AlterTableDto;
 
 import java.util.List;
 
@@ -13,19 +13,25 @@ import java.util.List;
  * @author yym
  * @date 2020/08/27
  */
-public class MySQLDatabaseMeta extends BaseDatabaseMeta implements DatabaseInterface {
+public class MySqlDatabaseMeta extends BaseDatabaseMeta implements DatabaseInterface {
 
-    private static MySQLDatabaseMeta single;
-
-    private MySQLDatabaseMeta(){
+    private MySqlDatabaseMeta(){
         super();
     }
 
-    public synchronized static MySQLDatabaseMeta getInstance() {
-        if (single == null) {
-            single = new MySQLDatabaseMeta();
-        }
-        return single;
+    /**
+     * 内部类创建
+     */
+    private static class MySQLDatabaseMetaHolder{
+        private final static MySqlDatabaseMeta INSTANCE = new MySqlDatabaseMeta();
+    }
+
+    /**
+     * 获取 MySQLDatabaseMeta
+     */
+    public static MySqlDatabaseMeta getInstance(){
+
+        return MySQLDatabaseMetaHolder.INSTANCE;
     }
 
     @Override

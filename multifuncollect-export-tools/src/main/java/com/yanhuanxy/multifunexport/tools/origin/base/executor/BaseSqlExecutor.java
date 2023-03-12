@@ -3,10 +3,11 @@ package com.yanhuanxy.multifunexport.tools.origin.base.executor;
 import com.google.gson.Gson;
 import com.yanhuanxy.multifunexport.tools.domain.origin.dto.AlterTableDto;
 import com.yanhuanxy.multifunexport.tools.domain.origin.dto.ColumnInfoDto;
-import com.yanhuanxy.multifunexport.tools.domain.origin.dto.DcDataSourceDto;
 import com.yanhuanxy.multifunexport.tools.domain.origin.dto.QueryParamDto;
+import com.yanhuanxy.multifunexport.tools.origin.base.DatabaseMetaFactory;
+import com.yanhuanxy.multifunexport.tools.origin.base.connection.InitDataSourceConnection;
+import com.yanhuanxy.multifunexport.tools.origin.base.meta.DatabaseInterface;
 import com.yanhuanxy.multifunexport.tools.origin.base.meta.ParserMultipleTableQuerySql;
-import com.yanhuanxy.multifunexport.tools.origin.base.query.BaseQueryTool;
 import com.yanhuanxy.multifunexport.tools.util.origin.JdbcUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -27,26 +28,36 @@ import java.util.stream.Collectors;
  * @author yym
  * @since 2020/08/27
  */
-public class BaseSQLExecutor extends BaseQueryTool implements SQLExecutorInterface {
+public class BaseSqlExecutor implements SqlExecutorInterface {
 
-    protected static final Logger logger = LoggerFactory.getLogger(BaseSQLExecutor.class);
+    protected static final Logger logger = LoggerFactory.getLogger(BaseSqlExecutor.class);
+
+    /**
+     * 用于获取查询语句
+     */
+    protected final DatabaseInterface sqlBuilder;
+
+    protected final Connection connection;
+    /**
+     * 当前数据库名
+     */
+    protected final String currentSchema;
+
+    /**
+     * 当前数据库类型
+     */
+    protected final String currentDatabase;
 
     /**
      * 构造方法
      *
      * @param dcDataSourceDto 数据源
      */
-    protected BaseSQLExecutor(DcDataSourceDto dcDataSourceDto) throws SQLException{
-        super(dcDataSourceDto);
-    }
-
-    /**
-     * 是否缓存数据连接
-     * @param dcDataSourceDto 数据源
-     * @param localCache 缓存集合
-     */
-    protected BaseSQLExecutor(DcDataSourceDto dcDataSourceDto,Boolean localCache) throws SQLException{
-        super(dcDataSourceDto,localCache);
+    public BaseSqlExecutor(InitDataSourceConnection dcDataSourceDto){
+        this.connection = dcDataSourceDto.getConnection();
+        this.currentSchema = dcDataSourceDto.getCurrentSchema();
+        this.currentDatabase = dcDataSourceDto.getDataSourceType();
+        this.sqlBuilder = DatabaseMetaFactory.getByDbType(dcDataSourceDto.getDataSourceType());
     }
 
     @Override
@@ -55,7 +66,7 @@ public class BaseSQLExecutor extends BaseQueryTool implements SQLExecutorInterfa
         ResultSet rs = null;
         Date maxVal = null;
         try {
-            stmt = getConnection().createStatement();
+            stmt = connection.createStatement();
             String sql = String.format("select max(%s) from %s",filedName,tableName);
             logger.info(sql);
             rs = stmt.executeQuery(sql);
@@ -107,7 +118,7 @@ public class BaseSQLExecutor extends BaseQueryTool implements SQLExecutorInterfa
     }
 
     protected String getSqlRenameTableName(String oldtableName, String tableName){
-        return getSqlBuilder().getSqlRenameTableName(oldtableName,tableName);
+        return sqlBuilder.getSqlRenameTableName(oldtableName,tableName);
     }
 
 
@@ -166,7 +177,7 @@ public class BaseSQLExecutor extends BaseQueryTool implements SQLExecutorInterfa
     }
 
     protected String getSqlAddTableColumn(AlterTableDto alterTableDto){
-        return getSqlBuilder().getSqlAddTableColumn(alterTableDto);
+        return sqlBuilder.getSqlAddTableColumn(alterTableDto);
     }
 
     @Override
@@ -186,7 +197,7 @@ public class BaseSQLExecutor extends BaseQueryTool implements SQLExecutorInterfa
     }
 
     protected String getSqlAddTableColumns(List<AlterTableDto> alterTableDtolist){
-        return getSqlBuilder().getSqlAddTableColumns(alterTableDtolist);
+        return sqlBuilder.getSqlAddTableColumns(alterTableDtolist);
     }
 
     @Override
@@ -207,7 +218,7 @@ public class BaseSQLExecutor extends BaseQueryTool implements SQLExecutorInterfa
     }
 
     protected String getSqlUpdateTableColumn(AlterTableDto alterTableDto){
-        return getSqlBuilder().getSqlUpdateTableColumn(alterTableDto);
+        return sqlBuilder.getSqlUpdateTableColumn(alterTableDto);
     }
 
     @Override
@@ -229,7 +240,7 @@ public class BaseSQLExecutor extends BaseQueryTool implements SQLExecutorInterfa
     }
 
     protected String getSqlChangeTableColumn(AlterTableDto alterTableDto){
-        return getSqlBuilder().getSqlChangeTableColumn(alterTableDto);
+        return sqlBuilder.getSqlChangeTableColumn(alterTableDto);
     }
 
     @Override
@@ -250,7 +261,7 @@ public class BaseSQLExecutor extends BaseQueryTool implements SQLExecutorInterfa
     }
 
     protected String getSqlDelTableColumn(AlterTableDto alterTableDto){
-        return getSqlBuilder().getSqlDelTableColumn(alterTableDto);
+        return sqlBuilder.getSqlDelTableColumn(alterTableDto);
     }
 
     @Override
@@ -270,7 +281,7 @@ public class BaseSQLExecutor extends BaseQueryTool implements SQLExecutorInterfa
     }
 
     protected String getSqlDelTableData(String tableName){
-        return getSqlBuilder().getSqlDelTableData(tableName);
+        return sqlBuilder.getSqlDelTableData(tableName);
     }
 
     @Override
@@ -290,7 +301,7 @@ public class BaseSQLExecutor extends BaseQueryTool implements SQLExecutorInterfa
     }
 
     protected String getSqlTruncateTableData(String tableName){
-        return getSqlBuilder().getSqlTruncateTableData(tableName);
+        return sqlBuilder.getSqlTruncateTableData(tableName);
     }
 
     @Override
@@ -310,7 +321,7 @@ public class BaseSQLExecutor extends BaseQueryTool implements SQLExecutorInterfa
     }
 
     protected String getSqlUpdateTableComment(String tableName, String tableComment){
-        return getSqlBuilder().getSqlUpdateTableComment(tableName,tableComment);
+        return sqlBuilder.getSqlUpdateTableComment(tableName,tableComment);
     }
 
     @Override
@@ -331,7 +342,7 @@ public class BaseSQLExecutor extends BaseQueryTool implements SQLExecutorInterfa
     }
 
     protected String getSqlUpdateTableColumnComment(AlterTableDto alterTableDto){
-        return getSqlBuilder().getSqlUpdateTableColumnComment(alterTableDto);
+        return sqlBuilder.getSqlUpdateTableColumnComment(alterTableDto);
     }
 
     @Override
@@ -353,7 +364,7 @@ public class BaseSQLExecutor extends BaseQueryTool implements SQLExecutorInterfa
     }
 
     protected String getSqlDistanceFinderDataBaseSizeBySchema(String schema) {
-        return getSqlBuilder().getSqlDistanceFinderDataBaseSizeBySchema(schema);
+        return sqlBuilder.getSqlDistanceFinderDataBaseSizeBySchema(schema);
     }
 
     /**
@@ -364,7 +375,7 @@ public class BaseSQLExecutor extends BaseQueryTool implements SQLExecutorInterfa
         logger.info(sqlbuild);
         Statement stmt = null;
         try{
-            stmt = getConnection().createStatement();
+            stmt = connection.createStatement();
             stmt.executeUpdate(sqlbuild);
         }finally {
             JdbcUtils.close(stmt);
@@ -382,7 +393,7 @@ public class BaseSQLExecutor extends BaseQueryTool implements SQLExecutorInterfa
         double dataLength;
         DecimalFormat df= new DecimalFormat("0.000");
         try {
-            stmt = getConnection().createStatement();
+            stmt = connection.createStatement();
             logger.info(sqlbuild);
             rs = stmt.executeQuery(sqlbuild);
             rs.next();
@@ -419,13 +430,12 @@ public class BaseSQLExecutor extends BaseQueryTool implements SQLExecutorInterfa
     }
 
     protected String getSqlDistanceFinderTableSizeBySchemaAndTableName(String schema,String tableName) {
-        return getSqlBuilder().getSqlDistanceFinderTableSizeBySchemaAndTableName(schema,tableName);
+        return sqlBuilder.getSqlDistanceFinderTableSizeBySchemaAndTableName(schema,tableName);
     }
 
     @Override
     public boolean insertToTable(String tableName, Map<String, Object> parameters){
         boolean isExecute = true;
-        Connection connection = getConnection();
         try {
             List<Object> data = new ArrayList<>();
             List<String> tmpFields = parameters.entrySet().stream().map(item -> {
@@ -479,7 +489,6 @@ public class BaseSQLExecutor extends BaseQueryTool implements SQLExecutorInterfa
     @Override
     public boolean updateToTable(String tableName,Map<String,Object> setParameters, List<QueryParamDto> queryParamDtos){
         boolean isExecute = true;
-        Connection connection = getConnection();
         try {
             List<Object> data = new ArrayList<>();
             List<String> setFields = setParameters.entrySet().stream().map(item -> {
@@ -533,7 +542,6 @@ public class BaseSQLExecutor extends BaseQueryTool implements SQLExecutorInterfa
     @Override
     public boolean deleteToTable(String tableName, List<QueryParamDto> queryParamDtos){
         boolean isExecute = true;
-        Connection connection = getConnection();
         try {
             List<Object> data = new ArrayList<>();
             String sql = makeDeleteToTableSql(tableName, queryParamDtos, data);

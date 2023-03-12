@@ -1,9 +1,9 @@
 package com.yanhuanxy.multifunexport.tools.origin.oracle;
 
-import com.yanhuanxy.multifunexport.tools.origin.base.executor.BaseSQLExecutor;
-import com.yanhuanxy.multifunexport.tools.origin.base.executor.SQLExecutorInterface;
 import com.yanhuanxy.multifunexport.tools.domain.origin.dto.ColumnInfoDto;
-import com.yanhuanxy.multifunexport.tools.domain.origin.dto.DcDataSourceDto;
+import com.yanhuanxy.multifunexport.tools.origin.base.connection.InitDataSourceConnection;
+import com.yanhuanxy.multifunexport.tools.origin.base.executor.BaseSqlExecutor;
+import com.yanhuanxy.multifunexport.tools.origin.base.executor.SqlExecutorInterface;
 import com.yanhuanxy.multifunexport.tools.util.origin.JdbcUtils;
 
 import java.sql.SQLException;
@@ -17,32 +17,18 @@ import java.util.Map;
  * @author yym
  * @since 2020/08/27
  */
-public class OracleSqlExecutor extends BaseSQLExecutor implements SQLExecutorInterface {
+public class OracleSqlExecutor extends BaseSqlExecutor implements SqlExecutorInterface {
 
-    public OracleSqlExecutor(DcDataSourceDto dcDataSourceDto) throws SQLException {
+    public OracleSqlExecutor(InitDataSourceConnection dcDataSourceDto) {
         super(dcDataSourceDto);
-    }
-    public OracleSqlExecutor(DcDataSourceDto dcDataSourceDto,Boolean localCache) throws SQLException {
-        super(dcDataSourceDto,localCache);
-    }
-
-    @Override
-    public List<Map<String, Object>> getTableNamesComment() {
-        List<Map<String, Object>> res = null;
-        try {
-            res = JdbcUtils.executeQuery(getConnection(), getSqlQueryTablesNameComments(), null);
-        } catch (SQLException e) {
-            logger.error("[getTableNamesComment Exception] --> the exception message is:{}",e.getMessage());
-        }
-        return res;
     }
 
     @Override
     public List<ColumnInfoDto> getSqlTableDesc(String tableName) {
-        String sql = getSqlTableDescCmd(tableName,currentSchema);
+        String sql = sqlBuilder.getSqlTableDesc(tableName,currentSchema);
         List<ColumnInfoDto> result = new ArrayList<>();
         try {
-            List<Map<String, Object>> maps = JdbcUtils.executeQuery(getConnection(), sql,null);
+            List<Map<String, Object>> maps = JdbcUtils.executeQuery(connection, sql,null);
             if(maps.size() > 0){
                 maps.forEach(item->{
                     ColumnInfoDto columnInfoDto = new ColumnInfoDto();

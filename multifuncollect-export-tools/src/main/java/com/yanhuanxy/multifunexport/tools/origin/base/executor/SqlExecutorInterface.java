@@ -13,7 +13,7 @@ import java.util.Map;
  * @author yym
  * @date 2020/08/27
  */
-public interface SQLExecutorInterface {
+public interface SqlExecutorInterface {
 
    /**
     * 获取最大时间

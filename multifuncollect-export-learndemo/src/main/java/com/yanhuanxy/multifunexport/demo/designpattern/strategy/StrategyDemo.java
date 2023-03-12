@@ -9,9 +9,9 @@ import java.util.logging.Logger;
 
 /**
  * 策略模式
- *
- * comparator ->
- * comparable ->
+ * 同一个问题的不同实现方式
+ * comparator -> 比较器
+ * comparable -> 比较接口
  */
 public class StrategyDemo {
     public static void main(String[] args) {

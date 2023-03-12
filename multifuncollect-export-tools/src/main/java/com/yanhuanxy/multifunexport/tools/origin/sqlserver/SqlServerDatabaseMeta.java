@@ -1,9 +1,9 @@
 package com.yanhuanxy.multifunexport.tools.origin.sqlserver;
 
 
+import com.yanhuanxy.multifunexport.tools.domain.origin.dto.AlterTableDto;
 import com.yanhuanxy.multifunexport.tools.origin.base.meta.BaseDatabaseMeta;
 import com.yanhuanxy.multifunexport.tools.origin.base.meta.DatabaseInterface;
-import com.yanhuanxy.multifunexport.tools.domain.origin.dto.AlterTableDto;
 
 import java.util.List;
 
@@ -14,17 +14,24 @@ import java.util.List;
  * @date 2020/08/27
  */
 public class SqlServerDatabaseMeta extends BaseDatabaseMeta implements DatabaseInterface {
-    private static SqlServerDatabaseMeta single;
 
     private SqlServerDatabaseMeta(){
         super();
     }
 
-    public synchronized static SqlServerDatabaseMeta getInstance() {
-        if (single == null) {
-            single = new SqlServerDatabaseMeta();
-        }
-        return single;
+    /**
+     * 内部类创建
+     */
+    private static class SqlServerDatabaseMetaHolder{
+        private final static SqlServerDatabaseMeta INSTANCE = new SqlServerDatabaseMeta();
+    }
+
+    /**
+     * 获取 OracleDatabaseMeta
+     */
+    public static SqlServerDatabaseMeta getInstance(){
+
+        return SqlServerDatabaseMetaHolder.INSTANCE;
     }
 
     @Override
