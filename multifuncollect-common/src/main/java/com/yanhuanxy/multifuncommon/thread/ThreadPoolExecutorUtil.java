@@ -1,6 +1,6 @@
 package com.yanhuanxy.multifuncommon.thread;
 
-import com.yanhuanxy.utils.SpringContextHolder;
+import com.yanhuanxy.multifuncommon.utils.SpringContextHolder;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
