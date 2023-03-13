@@ -1,9 +1,9 @@
 package com.yanhuanxy.multifunexport.tools.origin.oracle;
 
 
+import com.yanhuanxy.multifunexport.tools.domain.origin.dto.AlterTableDto;
 import com.yanhuanxy.multifunexport.tools.origin.base.meta.BaseDatabaseMeta;
 import com.yanhuanxy.multifunexport.tools.origin.base.meta.DatabaseInterface;
-import com.yanhuanxy.multifunexport.tools.domain.origin.dto.AlterTableDto;
 
 import java.util.List;
 
@@ -15,17 +15,23 @@ import java.util.List;
  */
 public class OracleDatabaseMeta extends BaseDatabaseMeta implements DatabaseInterface {
 
-    private static OracleDatabaseMeta single;
-
     private OracleDatabaseMeta(){
         super();
     }
 
-    public synchronized static OracleDatabaseMeta getInstance() {
-        if (single == null) {
-            single = new OracleDatabaseMeta();
-        }
-        return single;
+    /**
+     * 内部类创建
+     */
+    private static class OracleDatabaseMetaHolder{
+        private final static OracleDatabaseMeta INSTANCE = new OracleDatabaseMeta();
+    }
+
+    /**
+     * 获取 OracleDatabaseMeta
+     */
+    public static OracleDatabaseMeta getInstance(){
+
+        return OracleDatabaseMetaHolder.INSTANCE;
     }
 
     @Override

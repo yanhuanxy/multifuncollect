@@ -1,27 +1,31 @@
 package com.yanhuanxy.multifunexport.tools.origin.dm;
 
 
+import com.yanhuanxy.multifunexport.tools.domain.origin.dto.AlterTableDto;
 import com.yanhuanxy.multifunexport.tools.origin.base.meta.BaseDatabaseMeta;
 import com.yanhuanxy.multifunexport.tools.origin.base.meta.DatabaseInterface;
-import com.yanhuanxy.multifunexport.tools.domain.origin.dto.AlterTableDto;
 
 import java.util.List;
 
 public class DmDatabaseMeta extends BaseDatabaseMeta implements DatabaseInterface {
 
-    private static DmDatabaseMeta single;
-
     private DmDatabaseMeta(){
         super();
     }
 
-    public synchronized static DmDatabaseMeta getInstance() {
-        if (single == null) {
-            single = new DmDatabaseMeta();
-        }
-        return single;
+    /**
+     * 内部类创建
+     */
+    private static class DmDatabaseMetaHolder{
+        private final static DmDatabaseMeta INSTANCE = new DmDatabaseMeta();
     }
 
+    /**
+     * 获取 DmDatabaseMeta
+     */
+    public static DmDatabaseMeta getInstance() {
+        return DmDatabaseMetaHolder.INSTANCE;
+    }
 
     @Override
     public String getSqlQueryFields(String tableName) {

@@ -1,24 +1,15 @@
 package com.yanhuanxy.multifunexport.tools.origin.dm;
 
-import com.yanhuanxy.multifunexport.tools.origin.base.executor.BaseSQLExecutor;
-import com.yanhuanxy.multifunexport.tools.origin.base.executor.SQLExecutorInterface;
-import com.yanhuanxy.multifunexport.tools.domain.origin.dto.DcDataSourceDto;
-
-import java.sql.SQLException;
+import com.yanhuanxy.multifunexport.tools.origin.base.connection.InitDataSourceConnection;
+import com.yanhuanxy.multifunexport.tools.origin.base.executor.BaseSqlExecutor;
+import com.yanhuanxy.multifunexport.tools.origin.base.executor.SqlExecutorInterface;
 
 /**
  * 达梦数据库
  */
-public class DmExecutor extends BaseSQLExecutor implements SQLExecutorInterface {
+public class DmExecutor extends BaseSqlExecutor implements SqlExecutorInterface {
 
-    public DmExecutor(DcDataSourceDto dcDataSourceDto) throws SQLException {
+    public DmExecutor(InitDataSourceConnection dcDataSourceDto) {
         super(dcDataSourceDto);
     }
-
-
-    public DmExecutor(DcDataSourceDto dcDataSourceDto, Boolean isLocalCache) throws SQLException{
-        super(dcDataSourceDto,isLocalCache);
-    }
-
-
 }

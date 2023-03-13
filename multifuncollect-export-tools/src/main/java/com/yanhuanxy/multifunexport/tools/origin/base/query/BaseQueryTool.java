@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.yanhuanxy.multifunexport.tools.constant.origin.Constants;
 import com.yanhuanxy.multifunexport.tools.constant.origin.JdbcConstants;
 import com.yanhuanxy.multifunexport.tools.domain.origin.dto.*;
+import com.yanhuanxy.multifunexport.tools.origin.base.connection.InitDataSourceConnection;
 import com.yanhuanxy.multifunexport.tools.origin.base.meta.DatabaseInterface;
 import com.yanhuanxy.multifunexport.tools.origin.base.DatabaseMetaFactory;
 import com.yanhuanxy.multifunexport.tools.util.AESUtil;
@@ -31,219 +32,24 @@ public abstract class BaseQueryTool implements QueryToolInterface {
     /**
      * 用于获取查询语句
      */
-    private final DatabaseInterface sqlBuilder;
+    protected final DatabaseInterface sqlBuilder;
 
-    private DataSource datasource;
-
-    private Connection connection;
+    protected final Connection connection;
     /**
      * 当前数据库名
      */
     protected String currentSchema;
 
-    private final String currentDatabase;
-
-    private Boolean isLocalCache = true;
-
-    public DatabaseInterface getSqlBuilder() {
-        return sqlBuilder;
-    }
-
-    public DataSource getDatasource() {
-        return datasource;
-    }
-
-    public Connection getConnection() {
-        return connection;
-    }
-
-    public BaseQueryTool(DcDataSourceDto dcDataSourceDto) throws SQLException {
-        Long id = dcDataSourceDto.getId();
-        if (id == null){
-            id = System.currentTimeMillis();
-        }
-        String localCacheKey = dcDataSourceDto.getDbName() + "" + id;
-        if (LocalCacheUtil.get(localCacheKey) == null) {
-            getDataSourceAndConn(dcDataSourceDto);
-        } else {
-            this.connection = (Connection) LocalCacheUtil.get(localCacheKey);
-            if (!this.connection.isValid(500)) {
-                LocalCacheUtil.remove(localCacheKey);
-                getDataSourceAndConn(dcDataSourceDto);
-            }
-        }
-        sqlBuilder = DatabaseMetaFactory.getByDbType(dcDataSourceDto.getType());
-        currentSchema = getSchema(dcDataSourceDto.getDbAccount());
-        currentDatabase = dcDataSourceDto.getType();
-        if(isLocalCache){
-            long cacheTime = (long) 4 * 60 * 60 * 1000;
-            LocalCacheUtil.set(localCacheKey, this.connection, cacheTime);
-        }
-    }
-
     /**
-     * 构造方法
-     *
-     * @param dcDataSourceDto 数据源
+     * 当前数据库类型
      */
-    public BaseQueryTool(DcDataSourceDto dcDataSourceDto,Boolean localCache) throws SQLException {
-        isLocalCache = localCache;
-        Long id = dcDataSourceDto.getId();
-        if (id == null){
-            id = System.currentTimeMillis();
-        }
-        String localCacheKey = dcDataSourceDto.getDbName() + "" + id;
-        if (LocalCacheUtil.get(localCacheKey) == null) {
-            getDataSourceAndConn(dcDataSourceDto);
-        } else {
-            this.connection = (Connection) LocalCacheUtil.get(localCacheKey);
-            if (!this.connection.isValid(500)) {
-                LocalCacheUtil.remove(localCacheKey);
-                getDataSourceAndConn(dcDataSourceDto);
-            }
-        }
-        sqlBuilder = DatabaseMetaFactory.getByDbType(dcDataSourceDto.getType());
-        currentSchema = getSchema(AESUtil.decrypt(dcDataSourceDto.getDbAccount()));
-        currentDatabase = dcDataSourceDto.getType();
-        if(isLocalCache){
-            long cacheTime = (long) 4 * 60 * 60 * 1000;
-            LocalCacheUtil.set(localCacheKey, this.connection, cacheTime);
-        }
-    }
+    protected final String currentDatabase;
 
-    /**
-     * 连接数据库
-     * @param dcDataSourceDto 数据源
-     * @throws SQLException sql异常
-     */
-    private void getDataSourceAndConn(DcDataSourceDto dcDataSourceDto) throws SQLException {
-        String userName = AESUtil.decrypt(dcDataSourceDto.getDbAccount());
-        String userPassword = AESUtil.decrypt(dcDataSourceDto.getDbPassword());
-        String type = dcDataSourceDto.getType();
-        String jdbcUrl = getJdbcUrl(type, dcDataSourceDto.getIp(), dcDataSourceDto.getPort(),dcDataSourceDto.getDbName()) ;
-        logger.info("jdbcUrl: ------> " + jdbcUrl);
-        String jdbcDriver = getJdbcDriverClassName(dcDataSourceDto.getDbVersion());
-        //这里默认使用 hikari 数据源
-        HikariDataSource dataSource = new HikariDataSource();
-        dataSource.setUsername(userName);
-        dataSource.setPassword(userPassword);
-        dataSource.setJdbcUrl(jdbcUrl);
-        dataSource.setDriverClassName(jdbcDriver);
-        dataSource.setMaximumPoolSize(5);
-        dataSource.setMinimumIdle(1);
-        dataSource.setConnectionTimeout(30000);
-        this.datasource = dataSource;
-        this.connection = this.datasource.getConnection();
-    }
-
-    /**
-     *获取 jdbcUrl
-     * @param dcDataSourceDto 数据源
-     * @return String
-     */
-    public String getJdbcUrlByDcDataSourceDto(DcDataSourceDto dcDataSourceDto){
-        String type = dcDataSourceDto.getType();
-        String ip = dcDataSourceDto.getIp();
-        Integer port = dcDataSourceDto.getPort();
-        String dbName = dcDataSourceDto.getDbName();
-        return getJdbcUrl(type, ip, port,dbName);
-    }
-
-
-    /**
-     * 获取 jdbcUrl
-     * @param type 类型
-     * @param ip ip
-     * @param port 端口
-     * @param dbname 数据库名
-     * @return String
-     */
-    private String getJdbcUrl(String type,String ip,Integer port,String dbname){
-        StringBuilder jdbcurl = new StringBuilder();
-        switch (type){
-            case JdbcConstants.MYSQL:
-                jdbcurl.append("jdbc:mysql://");
-                jdbcurl.append(ip).append(":");
-                jdbcurl.append(port).append("/");
-                jdbcurl.append(dbname);
-                jdbcurl.append("?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&" +
-                        "serverTimezone=Asia%2FShanghai&characterEncoding=utf-8&useSSL=false");
-                break;
-            case JdbcConstants.ORACLE:
-                jdbcurl.append("jdbc:oracle:thin:@");
-                jdbcurl.append(ip).append(":");
-                jdbcurl.append(port).append("/");
-                jdbcurl.append(dbname);
-                break;
-            case JdbcConstants.SQL_SERVER:
-                jdbcurl.append("jdbc:sqlserver://");
-                jdbcurl.append(ip).append(":");
-                jdbcurl.append(port).append(";");
-                jdbcurl.append("DatabaseName=").append(dbname);
-                break;
-            case JdbcConstants.DM:
-                jdbcurl.append("jdbc:dm://");
-                jdbcurl.append(ip).append(":");
-                jdbcurl.append(port).append(":");
-                jdbcurl.append(dbname);
-                break;
-            default:
-                break;
-        }
-        return jdbcurl.toString();
-    }
-
-    /**
-     * 获取 dirverclassname
-     * @param dbversion 版本
-     * @return String
-     */
-    private String getJdbcDriverClassName(String dbversion){
-        if("Mysql5.X".equals(dbversion) || "Mysql4.X".equals(dbversion) || "Mysql3.X".equals(dbversion)){
-            return JdbcConstants.MYSQL_DRIVER_6;
-        }
-        if("Mysql8.X".equals(dbversion)){
-            return JdbcConstants.MYSQL_DRIVER_6;
-        }
-        if("Oracle8i".equals(dbversion)){
-            return JdbcConstants.ORACLE_DRIVER;
-        }
-        if("Oracle9i".equals(dbversion) || "Oracle10g".equals(dbversion) || "Oracle11g".equals(dbversion)){
-            return JdbcConstants.ORACLE_DRIVER2;
-        }
-        if("SqlServer2008".equals(dbversion)){
-            return JdbcConstants.SQL_SERVER_DRIVER_SQLJDBC4;
-        }
-
-        if("DM6.X".equals(dbversion)){
-            return JdbcConstants.DM_DRIVER;
-        }
-        return null;
-    }
-
-
-    /**
-     * 根据connection获取schema
-     * @param jdbcUsername 连接
-     * @return String
-     */
-    protected String getSchema(String jdbcUsername) {
-        String res = null;
-        try {
-            res = connection.getCatalog();
-        } catch (SQLException e) {
-            try {
-                res = connection.getSchema();
-            } catch (SQLException e1) {
-                logger.error("[SQLException getSchema Exception] --> the exception message is:{}" , e1.getMessage());
-            }
-            logger.error("[getSchema Exception] --> the exception message is:{}" , e.getMessage());
-        }
-        // 如果res是null，则将用户名当作 schema
-        if (StringUtils.isBlank(res) && StringUtils.isNotBlank(jdbcUsername)) {
-            res = jdbcUsername.toUpperCase();
-        }
-        return res;
+    public BaseQueryTool(InitDataSourceConnection dcDataSourceDto){
+        this.connection = dcDataSourceDto.getConnection();
+        this.currentSchema = dcDataSourceDto.getCurrentSchema();
+        this.currentDatabase = dcDataSourceDto.getDataSourceType();
+        this.sqlBuilder = DatabaseMetaFactory.getByDbType(dcDataSourceDto.getDataSourceType());
     }
 
     @Override
