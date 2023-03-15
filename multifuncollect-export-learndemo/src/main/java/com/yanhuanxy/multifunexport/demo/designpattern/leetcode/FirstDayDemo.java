@@ -135,18 +135,28 @@ public class FirstDayDemo {
             int enemyEnergy = this.energys[i];
             int enemyExperience = this.experiences[i];
             if(this.currentExperience > enemyExperience){
-                this.currentEnergy -= enemyEnergy;
-                this.currentExperience += enemyExperience;
+                // 击败
+                killEnemy(enemyEnergy, enemyExperience);
             }else {
                 // 锻炼经验次数
                 int experienceDifferVal = enemyExperience - this.currentExperience + 1;
                 maxTrainExperienceNum += experienceDifferVal / exerciseCoefficient;
-
-                this.currentEnergy -= enemyEnergy;
-                this.currentExperience += experienceDifferVal;
+                // 击败
+                killEnemy(enemyEnergy, experienceDifferVal);
             }
         }
         return maxTrainEnergyNum + maxTrainExperienceNum;
+    }
+
+
+    /**
+     * 击败敌人 失去精力 获得经验
+     * @param enemyEnergy 精力
+     * @param enemyExperience 经验
+     */
+    private void killEnemy(int enemyEnergy, int enemyExperience){
+        this.currentEnergy -= enemyEnergy;
+        this.currentExperience += enemyExperience;
     }
 
     /**
