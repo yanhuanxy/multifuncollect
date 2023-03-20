@@ -45,4 +45,8 @@ package com.yanhuanxy.multifunexport.demo.designpattern.leetcode;
  * 每对城市之间 最多只有一条 道路相连
  */
 public class ThirdDayDemo {
+
+    public static void main(String[] args) {
+
+    }
 }
