@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -52,14 +53,16 @@ public class FourthDayDemo {
     public FourthDayDemo(int[] nums, int k) {
         int n = nums.length;
         if(1 > n || n > 105){
-            throw new RuntimeException("数组长度在 1 <= n <= 105 ");
+            throw new RuntimeException("数组长度必须满足 1 <= n <= 105 ");
         }
-        boolean error = Arrays.stream(nums).anyMatch(item -> item < 1);
-        if(error){
-            throw new RuntimeException("数组元素 1 <= nums[i]");
+        boolean error = Arrays.stream(nums).anyMatch(item -> 1 > item || item > n);
+        boolean kError = 1 > k || k > n;
+        if(error || kError){
+            throw new RuntimeException("数组必须满足 1 <= nums[i],k <= n ");
         }
-        if(k > n){
-            throw new RuntimeException("数组长度在 k <= n ");
+        long distinctSize = Arrays.stream(nums).distinct().count();
+        if(n != distinctSize){
+            throw new RuntimeException("数组元素必须满足 nums 中的整数互不相同 ");
         }
 
         this.nums = nums;
@@ -80,40 +83,54 @@ public class FourthDayDemo {
     public int getMedianNoNullSubSetNums(){
         // 定位 中位数的下标
         // 获取 中位数最大的数组 中位数数组 定义 由小到大递增
-        List<Integer> subList = new ArrayList<>();
-        for (int i = 0; i < nums.length; i++) {
+        List<Integer> subList = new LinkedList<>();
+        int i = 0, l = 0;
+        boolean isContinue = true;
+        int size = nums.length;
+        while (i < size){
             int tmpVal = nums[i];
             if(k == tmpVal){
-                int j = i,l = i;
-                subList.add(k);
-                while (j+1 < nums.length){
-                    int jval =  nums[j++];
-                    int tmpjval = nums[j];
-                    if(tmpjval < jval){
-                        break;
-                    }
-                    int lval =  nums[l--];
-                    int tmplval =  nums[l];
-                    if(tmplval > lval){
-                        break;
-                    }
-                    subList.add(0, tmplval);
-                    subList.add(tmpjval);
+                l = i;
+                isContinue = false;
+                subList.add(tmpVal);
+            }
+            i++;
+            if(isContinue){
+                continue;
+            }
+            if(i < size){
+                int tmpjval = nums[i];
+                if(tmpVal > tmpjval){
+                    break;
                 }
-                break;
+                subList.add(tmpjval);
+            }
+            if(l - 1 >= 0){
+                int lval =  nums[l--];
+                int tmplval =  nums[l];
+                if(lval < tmplval){
+                    break;
+                }
+                subList.add(0, tmplval);
             }
         }
+
         Gson gson = new Gson();
         System.out.println(gson.toJson(subList));
 
-        // 数组长度 偶数-> 中位数 中间位置靠左元素
-        // 数组长度 奇数-> 中位数 中间位置
+        // 获取中位数数组中 中位数 = k 的所有子集
         getSubList(subList, new ArrayList<>(),0);
 
         System.out.println(gson.toJson(resultList));
         return resultList.size();
     }
 
+    /**
+     * 二叉树 + 中序遍历
+     * @param sourceList 原始集合
+     * @param tmpList 子集
+     * @param level 层级
+     */
     private void getSubList(List<Integer> sourceList, List<Integer> tmpList, int level){
         if(level == sourceList.size()){
             if(tmpList.isEmpty()){
