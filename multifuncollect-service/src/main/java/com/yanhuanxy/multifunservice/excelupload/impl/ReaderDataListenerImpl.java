@@ -1,6 +1,7 @@
 package com.yanhuanxy.multifunservice.excelupload.impl;
 
 import com.yanhuanxy.multifuncommon.enums.ReadEventTypeEnum;
+import com.yanhuanxy.multifuncommon.exception.BaseRuntimeException;
 import com.yanhuanxy.multifundao.desfrom.DesFormDataBatchUploadMapper;
 import com.yanhuanxy.multifundomain.excelupload.dto.UploadDataExcelDTO;
 import com.yanhuanxy.multifunexport.tools.util.ThreadPoolUtils;
@@ -81,7 +82,7 @@ public class ReaderDataListenerImpl implements ReaderListener {
         String errorMessage = executeInsertDataThread.getErrorMessage();
         if(Objects.nonNull(errorMessage)){
             storageStrategy.stream().map(item-> item[1]).forEach(desFormDataBatchUploadMapper::dropTable);
-            throw new RuntimeException("数据写入失败！" + errorMessage);
+            throw new BaseRuntimeException("数据写入失败！" + errorMessage);
         }
         if(!hasOnlyKey){
             storageStrategy.add(executeInsertDataThread.getUploadTableName());

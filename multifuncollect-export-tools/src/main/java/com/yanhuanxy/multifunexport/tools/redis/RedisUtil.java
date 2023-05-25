@@ -4,7 +4,6 @@ import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.stereotype.Component;
 
 import java.util.concurrent.TimeUnit;
 
@@ -12,7 +11,6 @@ import java.util.concurrent.TimeUnit;
  * @author yym
  * @version 1.0
  */
-@Component
 public class RedisUtil {
     protected static final Logger logger = LoggerFactory.getLogger(RedisUtil.class);
 

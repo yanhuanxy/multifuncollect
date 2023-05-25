@@ -1,5 +1,6 @@
 package com.yanhuanxy.multifunexport.tools.excel.watermark;
 
+import com.yanhuanxy.multifunexport.tools.exception.operation.ReadException;
 import org.apache.commons.io.input.ReaderInputStream;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.*;
@@ -212,7 +213,7 @@ public class ExcelCreateMarkxlsx {
 
         ByteArrayOutputStream byteArrayOut = new ByteArrayOutputStream();
         if(null == waterMarkImg) {
-            throw new RuntimeException("向Excel上面打印水印，读取水印图片失败(2)。");
+            throw new ReadException("向Excel上面打印水印，读取水印图片失败(2)。");
         }
         ImageIO.write(waterMarkImg,"png",byteArrayOut);
         int pictureIdx = workbook.addPicture(byteArrayOut.toByteArray(), Workbook.PICTURE_TYPE_PNG);

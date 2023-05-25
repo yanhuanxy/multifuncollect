@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yanhuanxy.multifuncommon.exception.BaseRuntimeException;
 import com.yanhuanxy.multifundao.dictionary.SysDictionaryItemMapper;
 import com.yanhuanxy.multifundomain.dictionary.dto.SysDictionaryItemAddParam;
 import com.yanhuanxy.multifundomain.dictionary.dto.SysDictionaryItemEditParam;
@@ -53,7 +54,7 @@ public class SysDictionaryItemServiceImpl extends ServiceImpl<SysDictionaryItemM
 
         SysDictionaryItem sysDictionaryItem = super.getById(param.getId());
         if(sysDictionaryItem == null){
-            throw new RuntimeException("字典不存在！校验后再尝试");
+            throw new BaseRuntimeException("字典不存在！校验后再尝试");
         }
 
         // 校验 字典项名称 和 编码
@@ -75,10 +76,10 @@ public class SysDictionaryItemServiceImpl extends ServiceImpl<SysDictionaryItemM
 
         List<SysDictionaryItem> dictionaryItems = queryList(itemText, itemValue);
         if(checkDictItemText(id, itemText, dictionaryItems)){
-            throw new RuntimeException("字典项名称重复！校验后再尝试");
+            throw new BaseRuntimeException("字典项名称重复！校验后再尝试");
         }
         if(checkDictItemValue(id, itemValue, dictionaryItems)){
-            throw new RuntimeException("字典项编码重复！校验后再尝试");
+            throw new BaseRuntimeException("字典项编码重复！校验后再尝试");
         }
     }
 

@@ -1,0 +1,46 @@
+@echo off&title frpcServiceReloadBat
+
+::if not defined TAG {
+::	set TAG=1
+::	start wt -p "cmd" 50
+::	exit
+::}
+
+echo 获取frpc进程 pid
+set x=0
+for /F "tokens=2" %%K in ('
+   tasklist /FI "ImageName eq cmd.exe" /FI "WindowTitle eq frpcServiceReloadBat" /FO LIST ^| findstr /B "PID:"
+') do (
+   echo frpcReload进程 pid: %%K
+   set cmdfrpcpid=%%K
+   set /a x+=1
+)
+timeout /T 1 /NOBREAK
+
+if not defined %cmdfrpcpid% (
+   timeout /T 1 /NOBREAK
+   for /F "tokens=2" %%K in ('
+      tasklist /FI "ImageName eq cmd.exe" /FI "WindowTitle eq frpcServiceStartBat" /FO LIST ^| findstr /B "PID:"
+   ') do (
+      echo frpcStart进程 pid: %%K
+      if not defined cmdfrpcpid (
+      	   taskkill /f /t /pid %%K
+      )
+   )
+) else (
+   timeout /T 1 /NOBREAK
+   if %x% gtr 1 (
+      taskkill /f /t /pid %cmdfrpcpid%
+   )
+)
+
+timeout /T 3 /NOBREAK
+
+::@REM :home
+:home
+
+frpc -c frpc.ini
+
+goto home
+::@REM goto home
+::exit

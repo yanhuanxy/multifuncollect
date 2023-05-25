@@ -3,6 +3,7 @@ package com.yanhuanxy.multifunservice.excelupload.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
 import com.yanhuanxy.multifuncommon.enums.FileTypeEnum;
+import com.yanhuanxy.multifuncommon.exception.BaseRuntimeException;
 import com.yanhuanxy.multifunexport.tools.util.BatchDecomUtil;
 import com.yanhuanxy.multifundao.desfrom.DesFormDataBatchUploadMapper;
 import com.yanhuanxy.multifundomain.desfrom.dto.DesTableColumnDTO;
@@ -229,7 +230,7 @@ public class UploadData {
                 //上传成功
                 proSmsVO.setEsParam(objectMapper.convertValue(ImmutableMap.of("type", "写入成功", "context", String.format("【%s】数据写入完成，开始时间:%s,结束时间:%s",
                         uploadMoreDataMain.getMainTemplateName(), simpleFormat.format(startDate),simpleFormat.format(endDate))), String.class));
-            }catch (RuntimeException e){
+            }catch (BaseRuntimeException e){
                 logger.error("上传数据写入失败，错误信息 {}", e.getMessage());
                 proSmsVO.setEsParam(objectMapper.convertValue((ImmutableMap.of("type", "写入失败", "context", ObjectUtils.isNotEmpty(e.getMessage())?e.getMessage():"")),String.class));
             }catch (Exception e){
@@ -308,7 +309,7 @@ public class UploadData {
             }
         } catch (Exception e) {
             logger.error("执行最后保存逻辑出错 错误信息:{}", e.getMessage());
-            throw new RuntimeException(String.format("执行最后保存逻辑出错 错误信息:%s", e.getMessage()));
+            throw new BaseRuntimeException(String.format("执行最后保存逻辑出错 错误信息:%s", e.getMessage()));
         }finally {
             try {
                 delTableName.forEach(tmptableName->{
@@ -460,7 +461,7 @@ public class UploadData {
                 Calendar nowtime = new GregorianCalendar();
                 return calcDate(tmpCurUploadDate, nowtime.get(Calendar.SECOND), nowtime.get(Calendar.MINUTE), nowtime.get(Calendar.HOUR_OF_DAY));
             }catch (ParseException e){
-                throw new RuntimeException("时间格式不对！yyyy-MM-dd");
+                throw new BaseRuntimeException("时间格式不对！yyyy-MM-dd");
             }
         }
         return new Date(System.currentTimeMillis());

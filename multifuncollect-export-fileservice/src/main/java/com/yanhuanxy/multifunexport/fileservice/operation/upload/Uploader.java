@@ -38,10 +38,10 @@ public abstract class Uploader {
     protected static final Logger logger = LoggerFactory.getLogger(Uploader.class);
 
     @Resource
-    OssRedisLock redisLock;
+    private OssRedisLock redisLock;
 
     @Resource
-    RedisUtil redisUtil;
+    private RedisUtil redisUtil;
 
     /**
      * 普通上传

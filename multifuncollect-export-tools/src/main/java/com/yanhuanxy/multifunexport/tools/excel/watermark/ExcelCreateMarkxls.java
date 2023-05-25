@@ -1,5 +1,6 @@
 package com.yanhuanxy.multifunexport.tools.excel.watermark;
 
+import com.yanhuanxy.multifunexport.tools.exception.operation.ReadException;
 import org.apache.commons.io.input.ReaderInputStream;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.poi.hssf.usermodel.*;
@@ -221,7 +222,7 @@ public class ExcelCreateMarkxls {
     private void putWaterRemarkToExcel(HSSFWorkbook wb, HSSFSheet sheet) throws IOException{
         ByteArrayOutputStream byteArrayOut = new ByteArrayOutputStream();
         if(null == waterMarkImg) {
-            throw new RuntimeException("向Excel上面打印水印，读取水印图片失败(2)。");
+            throw new ReadException("向Excel上面打印水印，读取水印图片失败(2)。");
         }
         sheet.protectSheet(userCode);
         ImageIO.write(waterMarkImg,"png",byteArrayOut);
@@ -244,7 +245,7 @@ public class ExcelCreateMarkxls {
 
     private void putWaterRemarkToExcelAllRow(HSSFWorkbook wb, HSSFSheet sheet) throws IOException{
         if(null == waterMarkImg) {
-            throw new RuntimeException("向Excel上面打印水印，读取水印图片失败(2)。");
+            throw new ReadException("向Excel上面打印水印，读取水印图片失败(2)。");
         }
         sheet.protectSheet(userCode);
         int firstRowNum = 0;

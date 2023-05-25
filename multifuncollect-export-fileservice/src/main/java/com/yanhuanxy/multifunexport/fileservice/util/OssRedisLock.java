@@ -1,5 +1,6 @@
 package com.yanhuanxy.multifunexport.fileservice.util;
 
+import com.yanhuanxy.multifunexport.fileservice.exception.RedisLockException;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,7 +64,7 @@ public class OssRedisLock {
         try {
             acquireLock(key, LOCK_EXPIRE_TIME, -1);
         } catch (Exception e) {
-            throw new RuntimeException("acquire lock exception", e);
+            throw new RedisLockException("acquire lock exception", e);
         }
     }
 
@@ -75,7 +76,7 @@ public class OssRedisLock {
         try {
             release(key);
         } catch (Exception e) {
-            throw new RuntimeException("release lock exception", e);
+            throw new RedisLockException("release lock exception", e);
         }
     }
 
@@ -88,7 +89,7 @@ public class OssRedisLock {
         try {
             return acquireLock(key, LOCK_EXPIRE_TIME, -1);
         } catch (Exception e) {
-            throw new RuntimeException("acquire lock exception", e);
+            throw new RedisLockException("acquire lock exception", e);
         }
     }
 
@@ -103,7 +104,7 @@ public class OssRedisLock {
         try {
             return acquireLock(key, LOCK_EXPIRE_TIME, unit.toSeconds(time));
         } catch (Exception e) {
-            throw new RuntimeException("acquire lock exception", e);
+            throw new RedisLockException("acquire lock exception", e);
         }
     }
 

@@ -3,6 +3,8 @@ package com.yanhuanxy.multifunexport.tools.origin.base.meta;
 import com.yanhuanxy.multifunexport.tools.constant.origin.JdbcConstants;
 import com.yanhuanxy.multifunexport.tools.domain.origin.vo.ColumnInfoVo;
 import com.yanhuanxy.multifunexport.tools.domain.origin.vo.TableInfoVo;
+import com.yanhuanxy.multifunexport.tools.exception.origin.BaseException;
+import com.yanhuanxy.multifunexport.tools.exception.origin.DbException;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -23,7 +25,7 @@ public class ParserCreateTableSql {
     public List<String> convertTableInfoFieldToSql(String dataSourceType, String tableName, String tableComment, TableInfoVo tableInfoVo){
         List<ColumnInfoVo> tableColumns = tableInfoVo.getColumns();
         if(ObjectUtils.isEmpty(tableColumns)){
-            throw new RuntimeException("表字段为空，无法构建！");
+            throw new BaseException("表字段为空，无法构建！");
         }
         List<String> sqlddls;
         switch (dataSourceType){

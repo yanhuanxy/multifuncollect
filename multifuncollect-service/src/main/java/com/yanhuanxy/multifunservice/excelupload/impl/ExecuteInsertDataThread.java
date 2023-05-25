@@ -1,5 +1,6 @@
 package com.yanhuanxy.multifunservice.excelupload.impl;
 
+import com.yanhuanxy.multifuncommon.exception.BaseRuntimeException;
 import com.yanhuanxy.multifundao.desfrom.DesFormDataBatchUploadMapper;
 import com.yanhuanxy.multifundomain.desfrom.dto.DesDataUploadBatchDTO;
 import com.yanhuanxy.multifundomain.desfrom.dto.DesTableColumnDTO;
@@ -112,7 +113,7 @@ public class ExecuteInsertDataThread implements Runnable {
                             batchUploadMapper.insertDataBatch(uploadBatchDTOs, tmpDatasource);
                         } catch (Exception e) {
                             logger.error("批量保存数据错误：错误信息{}数据{}", e.getMessage(), uploadBatchDTOs.size());
-                            throw new RuntimeException(String.format("批量保存数据错误：错误信息%s",  e.getMessage()));
+                            throw new BaseRuntimeException(String.format("批量保存数据错误：错误信息%s",  e.getMessage()));
                         }
                         //重置
                         uploadBatchDTOs = new ArrayList<>();
@@ -122,7 +123,7 @@ public class ExecuteInsertDataThread implements Runnable {
                     }
                 }
             }
-        }catch (RuntimeException e){
+        }catch (BaseRuntimeException e){
             logger.error("上传数据写入临时表失败，错误信息{}", e.getMessage());
             errorMessage = ObjectUtils.isNotEmpty(e.getMessage())? e.getMessage() : "";
             if(session != null){

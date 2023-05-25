@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yanhuanxy.multifuncommon.exception.BaseRuntimeException;
 import com.yanhuanxy.multifundao.dictionary.SysDictionaryMapper;
 import com.yanhuanxy.multifundomain.dictionary.dto.SysDictionaryAddParam;
 import com.yanhuanxy.multifundomain.dictionary.dto.SysDictionaryEditParam;
@@ -63,7 +64,7 @@ public class SysDictionaryServiceImpl extends ServiceImpl<SysDictionaryMapper, S
 
         SysDictionary dictionary = super.getById(param.getId());
         if(dictionary == null){
-            throw new RuntimeException("字典信息不存在！刷新页面重新尝试");
+            throw new BaseRuntimeException("字典信息不存在！刷新页面重新尝试");
         }
         // 校验字典名称 字典编码 是否重复
         checkDictNameAndCode(param.getId(), param.getDictName(), param.getDictCode());
@@ -92,10 +93,10 @@ public class SysDictionaryServiceImpl extends ServiceImpl<SysDictionaryMapper, S
 
         List<SysDictionary> dictionaries = queryList(dictName, dictCode);
         if(checkDictName(id, dictName, dictionaries)){
-            throw new RuntimeException("字典名称重复！校验后再尝试");
+            throw new BaseRuntimeException("字典名称重复！校验后再尝试");
         }
         if(checkDictCode(id, dictCode, dictionaries)){
-            throw new RuntimeException("字典编码重复！校验后再尝试");
+            throw new BaseRuntimeException("字典编码重复！校验后再尝试");
         }
     }
 
@@ -183,7 +184,7 @@ public class SysDictionaryServiceImpl extends ServiceImpl<SysDictionaryMapper, S
     @Override
     public List<SysDictionaryItem> findSysDictionaryItemList(String dictCode) {
         if(ObjectUtils.isEmpty(dictCode)){
-            throw new RuntimeException("字典编码为空！");
+            throw new BaseRuntimeException("字典编码为空！");
         }
 
         return sysDictionaryMapper.getDictionaryItemListByDictCode(dictCode);
