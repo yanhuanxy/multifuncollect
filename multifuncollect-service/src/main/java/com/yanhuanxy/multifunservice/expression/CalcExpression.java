@@ -5,13 +5,15 @@ import com.yanhuanxy.multifunservice.expression.enums.ParamDataTypeEnums;
 import com.yanhuanxy.multifunservice.expression.vo.DefaultDataColumnVO;
 import com.yanhuanxy.multifunservice.expression.vo.ExpressionConfigVO;
 import com.yanhuanxy.multifunservice.expression.vo.ExpressionParams;
-import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * 计算表达式
@@ -151,66 +153,66 @@ public class CalcExpression {
      *  columnDataType 字段集合
      */
     public Object handleRowDataExecuteExpression(long currentSysDate, Map<String,Object> rowData, ExpressionParams expressionParams){
-        Map<String, ExpressionParams> tmpExpressionParams = expressionParams.getExpressionParams();
-        List<String> expressionSuffixList = expressionParams.getExpressionSuffixList();
-        Stack<DPUExpressionStackItem> decimalStack = new Stack<>();
-        // 1 日期只能相减
-        // 2 日期相减 = 数值
-        // 3 日期 + 数值 = 日期
-        try {
-            for (String tmpVal : expressionSuffixList) {
-                if (DPUExpressionTypeEnum.checkCharIsSymbol(tmpVal)) {
-                    DPUExpressionStackItem tmpOne = decimalStack.pop();
-                    DPUExpressionStackItem tmpTwo = decimalStack.pop();
-                    boolean isPlus = Objects.equals(DPUExpressionTypeEnum.PLUS.getSymbol(), tmpVal);
-                    boolean isSubtract = Objects.equals(DPUExpressionTypeEnum.SUBTRACT.getSymbol(), tmpVal);
-                    boolean isDateOne = Objects.equals(DPUDataTypeEnums.DATE.getDataType(), tmpOne.getColumnDataType());
-                    boolean isDateTwo = Objects.equals(DPUDataTypeEnums.DATE.getDataType(), tmpTwo.getColumnDataType());
-                    if (!isSubtract && isDateOne && isDateTwo) {
-                        throw new KelvenRuntimeException("自定义公式异常！多个时间类型字段只能相减");
-                    } else if ((!isPlus && !isSubtract) && (isDateOne || isDateTwo)) {
-                        throw new KelvenRuntimeException("自定义公式异常！时间类型字段只能加减");
-                    }
-                    if(Objects.isNull(tmpTwo.getColumnVal()) || Objects.isNull(tmpOne.getColumnVal())){
-                        decimalStack.push(CalcDataTypeHasDateExpression.COLUMN_VALUE_NULL.calcExpression(tmpVal, tmpTwo, tmpOne));
-                        continue;
-                    }
-                    if (isDateOne || isDateTwo) {
-                        DPUExpressionStackItem dpuExpressionStackItem;
-                        if (isDateOne && isDateTwo) {
-                            dpuExpressionStackItem = CalcDataTypeHasDateExpression.DATE_DATE.calcExpression(tmpVal, tmpTwo, tmpOne);
-                        } else {
-                            dpuExpressionStackItem = CalcDataTypeHasDateExpression.DATE_NUMBER.calcExpression(tmpVal, tmpTwo, tmpOne);
-                        }
-                        decimalStack.push(dpuExpressionStackItem);
-                    }else {
-                        decimalStack.push(CalcDataTypeHasDateExpression.NUMBER_NUMBER.calcExpression(tmpVal, tmpTwo, tmpOne));
-                    }
-                } else {
-                    DPUExpressionStackItem dpuExpressionStackItem = expressionSuffixParamsList.stream().filter(item -> Objects.equals(tmpVal, item.getColumnName())).findAny().orElse(new DPUExpressionStackItem());
-                    if(ObjectUtils.isEmpty(dpuExpressionStackItem.getColumnName())){
-                        throw new KelvenRuntimeException("字段不存在！");
-                    }
-                    decimalStack.push(dpuExpressionStackItem);
-                }
-            }
-            // 根据字段数据类型 返回对应的类型数据
-            DPUExpressionStackItem expressionStackItem = decimalStack.pop();
-            BigDecimal columnVal = expressionStackItem.getColumnVal();
-            Object result;
-            if (Objects.equals(DPUDataTypeEnums.DATE.getDataType(), expressionStackItem.getColumnDataType())) {
-                result = Objects.isNull(columnVal) ?  null : new Timestamp(columnVal.longValue());
-            } else {
-                if (DPUDataTypeEnums.isInteger(resultDataType)) {
-                    result = columnVal.longValue();
-                } else {
-                    result = columnVal;
-                }
-            }
-            return result;
-        }catch(Exception e){
-            throw new KelvenRuntimeException("自定义公式 后缀表达式执行异常！" + e.getMessage(), e);
-        }
+//        Map<String, ExpressionParams> tmpExpressionParams = expressionParams.getExpressionParams();
+//        List<String> expressionSuffixList = expressionParams.getExpressionSuffixList();
+//        Stack<DPUExpressionStackItem> decimalStack = new Stack<>();
+//        // 1 日期只能相减
+//        // 2 日期相减 = 数值
+//        // 3 日期 + 数值 = 日期
+//        try {
+//            for (String tmpVal : expressionSuffixList) {
+//                if (SpecialCharTypeEnums.checkCharIsSymbol(tmpVal)) {
+//                    DPUExpressionStackItem tmpOne = decimalStack.pop();
+//                    DPUExpressionStackItem tmpTwo = decimalStack.pop();
+//                    boolean isPlus = Objects.equals(SpecialCharTypeEnums.PLUS.getSymbol(), tmpVal);
+//                    boolean isSubtract = Objects.equals(SpecialCharTypeEnums.SUBTRACT.getSymbol(), tmpVal);
+//                    boolean isDateOne = Objects.equals(ParamDataTypeEnums.DATE.getDataType(), tmpOne.getColumnDataType());
+//                    boolean isDateTwo = Objects.equals(ParamDataTypeEnums.DATE.getDataType(), tmpTwo.getColumnDataType());
+//                    if (!isSubtract && isDateOne && isDateTwo) {
+//                        throw new KelvenRuntimeException("自定义公式异常！多个时间类型字段只能相减");
+//                    } else if ((!isPlus && !isSubtract) && (isDateOne || isDateTwo)) {
+//                        throw new KelvenRuntimeException("自定义公式异常！时间类型字段只能加减");
+//                    }
+//                    if(Objects.isNull(tmpTwo.getColumnVal()) || Objects.isNull(tmpOne.getColumnVal())){
+//                        decimalStack.push(CalcDataTypeHasDateExpression.COLUMN_VALUE_NULL.calcExpression(tmpVal, tmpTwo, tmpOne));
+//                        continue;
+//                    }
+//                    if (isDateOne || isDateTwo) {
+//                        DPUExpressionStackItem dpuExpressionStackItem;
+//                        if (isDateOne && isDateTwo) {
+//                            dpuExpressionStackItem = CalcDataTypeHasDateExpression.DATE_DATE.calcExpression(tmpVal, tmpTwo, tmpOne);
+//                        } else {
+//                            dpuExpressionStackItem = CalcDataTypeHasDateExpression.DATE_NUMBER.calcExpression(tmpVal, tmpTwo, tmpOne);
+//                        }
+//                        decimalStack.push(dpuExpressionStackItem);
+//                    }else {
+//                        decimalStack.push(CalcDataTypeHasDateExpression.NUMBER_NUMBER.calcExpression(tmpVal, tmpTwo, tmpOne));
+//                    }
+//                } else {
+//                    DPUExpressionStackItem dpuExpressionStackItem = expressionSuffixParamsList.stream().filter(item -> Objects.equals(tmpVal, item.getColumnName())).findAny().orElse(new DPUExpressionStackItem());
+//                    if(ObjectUtils.isEmpty(dpuExpressionStackItem.getColumnName())){
+//                        throw new KelvenRuntimeException("字段不存在！");
+//                    }
+//                    decimalStack.push(dpuExpressionStackItem);
+//                }
+//            }
+//            // 根据字段数据类型 返回对应的类型数据
+//            DPUExpressionStackItem expressionStackItem = decimalStack.pop();
+//            BigDecimal columnVal = expressionStackItem.getColumnVal();
+//            Object result;
+//            if (Objects.equals(ParamDataTypeEnums.DATE.getDataType(), expressionStackItem.getColumnDataType())) {
+//                result = Objects.isNull(columnVal) ?  null : new Timestamp(columnVal.longValue());
+//            } else {
+//                if (ParamDataTypeEnums.isInteger(resultDataType)) {
+//                    result = columnVal.longValue();
+//                } else {
+//                    result = columnVal;
+//                }
+//            }
+//            return result;
+//        }catch(Exception e){
+//            throw new KelvenRuntimeException("自定义公式 后缀表达式执行异常！" + e.getMessage(), e);
+//        }
 
         return null;
     }

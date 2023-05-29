@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.yanhuanx.excelupload.mapper.DesFormDataBatchUploadMapper">
+<mapper namespace="com.yanhuanxy.multifundao.desfrom.DesFormDataBatchUploadMapper">
 
 	<insert id="insertDataBatch" >
 		INSERT ALL
@@ -27,14 +27,14 @@
 						 and col.table_name=#{tableName}) where rownum=1
 	</select>
 
-	<select id="getColumns" resultType="com.yanhuanx.excelupload.dto.desfrom.DesTableColumnDTO">
+	<select id="getColumns" resultType="com.yanhuanxy.multifundomain.desfrom.dto.DesTableColumnDTO">
 		select COLUMN_NAME as columnName,DATA_TYPE as dataType from user_tab_columns where Table_Name=#{tableName}
 	</select>
 	<select id="findTable" resultType="java.lang.Integer">
 		select count(*) from user_tables where table_name =upper(#{tableName})
 	</select>
 	<select id="getAllColumns"
-					resultType="com.yanhuanx.excelupload.dto.desfrom.DesTableColumnDTO">
+					resultType="com.yanhuanxy.multifundomain.desfrom.dto.DesTableColumnDTO">
 		select COLUMN_NAME as columnName,DATA_TYPE as dataType from all_tab_columns where Table_Name = #{tableName} AND OWNER = #{owner}
 	</select>
 	<select id="getPrimaryUserKey" resultType="java.lang.String">

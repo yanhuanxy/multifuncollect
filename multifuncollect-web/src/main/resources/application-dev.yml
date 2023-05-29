@@ -1,0 +1,160 @@
+server:
+  port: 8888
+  ssl:
+    key-store: classpath:static/multifuncollectclient.pkcs12
+    key-store-password: kelven
+    key-store-type: pkcs12
+  http-port: 8889
+  servlet:
+    context-path: /multifuncollect
+  tomcat:
+    connection-timeout: 180000
+spring:
+  application:
+    name: multifuncollect
+  servlet:
+    multipart:
+      max-file-size: 1000MB
+      max-request-size: 1050MB
+  # 静态资源管理（外部静态资源映射示例：file:/xxx/xxx）
+  web:
+    resources:
+      static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public
+  # 修改mvc路径默认的匹配策略（适配swagger3）
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  # 数据源配置
+  datasource:
+    url: jdbc:mysql://192.168.0.137:3306/asset?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&autoReconnect=true&useSSL=false
+    username: asset
+    password: asset@2023
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # druid连接池配置
+    druid:
+      max-active: 20
+      max-wait: 10000
+      min-idle: 20
+  # redis配置
+  redis:
+    database: 0
+    host: 192.168.0.222
+    password: qiyun@123
+    port: 6379
+    # 连接超时时间（毫秒）
+    timeout: 5000
+    # lettuce连接池配置
+    lettuce:
+      shutdown-timeout: 200
+      pool:
+        # 连接池中的最大连接数
+        max-active: 8
+        # 连接池阻塞等待时间（负值表示没有限制）
+        max-wait: -1
+        # 连接池中的最大空闲连接
+        max-idle: 8
+        # 连接池中最小空闲连接
+        min-idle: 0
+# mybatis-plus 配置
+mybatis-plus:
+  # MyBatis Mapper 所对应的 XML 文件位置
+  #mapper-locations: classpath*:mapper/**/*.xml
+  # 通过该属性可以给包中的类注册别名，mapper.xml中调用的时候不用包含包名
+  #typeAliasesPackage: com.knowledge.domain
+  # MyBatis 原生支持的配置
+  configuration:
+    # 值为null时，是否调用映射对象的 Setter（Map 对象时为 put）方法
+    call-setters-on-nulls: true
+    # 配置列空值类型 JdbcTypeForNull, oracle数据库必须配置。注意单引号，默认为other
+    jdbc-type-for-null: 'null'
+  # MyBatis-Plus 全局策略配置
+  global-config:
+    db-config:
+      # 主键类型
+      id-type: input
+      # 逻辑删除状态（0：正常，1：已删除）（配合@TableLogic注解使用）
+      logic-not-delete-value: 0
+      logic-delete-value: 1
+# security鉴权配置
+auth:
+  # 初始化密码
+  init-password: knowledge@2023
+  # 白名单-可直接访问的静态资源
+  permit-resource:
+    - /favicon.ico
+    - /*.html
+    - /**/*.html
+    - /**/*.css
+    - /**/*.js
+    - /**/*.png
+    - /**/*.jpg
+    - /**/*.ttf
+    - /**/*.woff
+    - /**/*.wav
+    - /**/*.gif
+  # 白名单-可直接访问的接口地址
+  permit-method:
+    - /swagger-resources
+    - /v3/api-docs/**
+    - /register/**
+    - /captcha/**
+    - /login/**
+    - /password/**
+  # jwt配置
+  jwt:
+    # token-属性名
+    header: Authorization
+    # token-密钥
+    secret: knowledge@2023
+    # 签发人（项目名）
+    issuer: ${spring.application.name}
+    # token失效时间（单位：分钟）
+    expire-time-minutes: 43200
+    # token有效期刷新时间（单位：分钟）
+    refresh-time-minutes: 20
+# swagger3配置
+springdoc:
+  # 开启paramObject解析,即get请求的form参数解析
+  default-flat-param-object: true
+  # swagger访问路径
+  swagger-ui:
+    path: /swagger-ui.html
+# knife4j-增强配置
+knife4j:
+  # 开启增强功能
+  enable: true
+  # 为swagger-ui.html页面与doc.html页面开启登录认证功能
+  basic:
+    enable: true
+    username: admin
+    password: admin@2023
+# 短信
+sms:
+  # 主题（可以是项目名称或系统名称等）
+  subject: 测试
+  # 服务地址
+  host: http://120.79.19.104:9008
+  # 短信发送方式
+  method: sendSMS
+  # 是否是长短信
+  is-long-sms: 0
+  # 发件人账号
+  username: panjianfeng
+  # 发件人密码
+  password: 19145612197
+  # 短信类别（0：通知）
+  type: 0
+# 邮件配置
+email:
+  # 邮件服务器的SMTP地址，可选，默认为smtp.<发件人邮箱后缀>
+  host: smtp.kelven.cn
+  # 邮件服务器的SMTP端口，可选，默认25
+  port: 25
+  # 发件人（必须正确，否则发送失败）
+  from: qiyuntongxun1@kelven.cn
+  # 用户名
+  username: qiyuntongxun1@kelven.cn
+  # 密码（注意，某些邮箱需要为SMTP服务单独设置授权码，详情查看相关帮助）
+  password: Qiyun2019
+  # 是否使用SSL安全连接
+  ssl: false
