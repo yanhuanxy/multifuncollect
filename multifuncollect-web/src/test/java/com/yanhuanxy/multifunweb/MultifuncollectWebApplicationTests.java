@@ -1,6 +1,7 @@
 package com.yanhuanxy.multifunweb;
 
-import com.yanhuanxy.multifunservice.socket.MultipleCompetitionWebsocketClient;
+import com.yanhuanxy.multifunservice.socket.test.MultipleCompetitionWebsocketClient;
+import org.java_websocket.client.WebSocketClient;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -30,6 +31,10 @@ public class MultifuncollectWebApplicationTests {
 
     public static void main(String[] args) {
         MultipleCompetitionWebsocketClient multipleCompetitionWebsocketClient = new MultipleCompetitionWebsocketClient();
-        multipleCompetitionWebsocketClient.connect("ws://192.168.0.98:8889/multifuncollect/multipleMatch/1/1", null);
+        WebSocketClient connect = multipleCompetitionWebsocketClient.connect("ws://192.168.0.98:8888/knowledge/multipleMatch/1/1", null);
+//        multipleCompetitionWebsocketClient.connect("ws://192.168.0.98:8889/multifuncollect/multipleMatch/1/1", null);
+        connect.send("111");
     }
+
+
 }

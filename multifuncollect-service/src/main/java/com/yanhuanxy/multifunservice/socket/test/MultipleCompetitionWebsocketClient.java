@@ -1,4 +1,4 @@
-package com.yanhuanxy.multifunservice.socket;
+package com.yanhuanxy.multifunservice.socket.test;
 
 import com.google.gson.Gson;
 import com.yanhuanxy.multifuncommon.exception.BaseRuntimeException;

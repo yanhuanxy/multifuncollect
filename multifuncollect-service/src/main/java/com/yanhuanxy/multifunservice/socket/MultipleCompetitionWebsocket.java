@@ -6,12 +6,10 @@ import jakarta.websocket.OnOpen;
 import jakarta.websocket.Session;
 import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
 @ServerEndpoint("/multipleMatch/{userId}/{sessionId}")
 public class MultipleCompetitionWebsocket {
 
