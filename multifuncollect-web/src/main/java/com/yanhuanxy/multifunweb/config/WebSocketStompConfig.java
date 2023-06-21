@@ -22,6 +22,9 @@ import org.springframework.web.socket.server.HandshakeInterceptor;
 import javax.servlet.http.HttpSession;
 import java.util.Map;
 
+/**
+ * stomp 实现websocket
+ */
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketStompConfig implements WebSocketMessageBrokerConfigurer {

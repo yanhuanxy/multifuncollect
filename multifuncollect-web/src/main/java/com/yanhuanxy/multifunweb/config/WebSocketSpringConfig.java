@@ -7,6 +7,9 @@ import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
+/**
+ * 基于 spring 封装 websocket
+ */
 @Configuration
 @EnableWebSocket
 public class WebSocketSpringConfig implements WebSocketConfigurer {
