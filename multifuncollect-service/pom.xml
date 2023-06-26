@@ -55,5 +55,23 @@
             <version>4.5.14</version>
         </dependency>
 
+        <!--&lt;!&ndash; https://mvnrepository.com/artifact/org.bytedeco/javacv &ndash;&gt;
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>javacv</artifactId>
+        </dependency>
+
+        &lt;!&ndash; https://mvnrepository.com/artifact/org.bytedeco/ffmpeg &ndash;&gt;
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>ffmpeg</artifactId>
+        </dependency>-->
+
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>javacv-platform</artifactId>
+        </dependency>
+
+
     </dependencies>
 </project>
