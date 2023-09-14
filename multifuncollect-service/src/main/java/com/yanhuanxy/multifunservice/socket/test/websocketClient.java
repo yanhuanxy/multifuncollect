@@ -1,16 +1,10 @@
 package com.yanhuanxy.multifunservice.socket.test;
 
 import com.google.gson.Gson;
-import org.bytedeco.javacv.FFmpegFrameGrabber;
-import org.bytedeco.javacv.Frame;
-import org.bytedeco.javacv.Java2DFrameConverter;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft_6455;
 import org.java_websocket.handshake.ServerHandshake;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -22,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 public class websocketClient {
     private static volatile Object object = new Object();
 
-//    public static void main(String[] args) {
+    public static void main(String[] args) {
 //        Map<Integer, String> head = new HashMap<>();
 //        head.put(8, "eyJhbGciOiJIUzUxMiJ9.eyJMT0dJTl9VU0VSX0tFWV8iOiI1NzY3ZGQ4Mi1hN2EwLTQ4ZDYtODExYi05MTg0ZTJkOWMzYzYiLCJjbGFpbXNfY291bnRfa2V5IjoidGVzdDYiLCJpc3MiOiJrbm93bGVkZ2UiLCJzdWIiOiJVU0VSTkFNRSIsImF1ZCI6IldlYiIsImlhdCI6MTY4NjU1NzMzMn0.Kch4AR215VaKOGbAkdHJVuUzbZJzUAbqJOGzPaiuGMIvuuLio0qZfGCTBZH2gy6qNex6lezhdQ4vGsSfvEUPQA");
 //        head.put(9, "eyJhbGciOiJIUzUxMiJ9.eyJMT0dJTl9VU0VSX0tFWV8iOiJkNDQzNzliNy1mZjE5LTQ3NTYtYmNjNy1lMjNjZDczMzgwMzMiLCJjbGFpbXNfY291bnRfa2V5IjoidGVzdDciLCJpc3MiOiJrbm93bGVkZ2UiLCJzdWIiOiJVU0VSTkFNRSIsImF1ZCI6IldlYiIsImlhdCI6MTY4NjU1NzM2MX0.uIw_6DUkE-8-C82H9I1KOl6JEgE1JELjkm0BDn5dUWGb4wdGzVfHzzZg5CakY9TxZCTjWqcTKuRyvchvh83jqA");
@@ -33,8 +27,13 @@ public class websocketClient {
 //        head2.put(11, "eyJhbGciOiJIUzUxMiJ9.eyJMT0dJTl9VU0VSX0tFWV8iOiIyM2I1ZTEzYS0xZTUzLTRkYmYtODdkZi05OGZlY2M3ZGFjOGMiLCJjbGFpbXNfY291bnRfa2V5IjoidGVzdDkiLCJpc3MiOiJrbm93bGVkZ2UiLCJzdWIiOiJVU0VSTkFNRSIsImF1ZCI6IldlYiIsImlhdCI6MTY4NjU1NzQzNX0.vHQvfZAiLW1z5AG56RZSbrhNIOzJxzjxag6NBxcQ4H_JEhOe1H2A9uoCkHQQX9lKu6fpKGnul-irhLr0tvZVWg");
 //        creatThread(2, 10,head2);
 
+        System.out.println(0b0111);
+        System.out.println(0b0101);
+        long aaa = 1_23467_2455222222L;
+        System.out.println(aaa);
+    }
 
-//    }
+
 
     public static void creatThread(int num, int start, Map<Integer, String> head){
         for (int i = start; i < start + num; i++) {
