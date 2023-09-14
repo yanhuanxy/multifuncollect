@@ -94,17 +94,15 @@ public class MinioClientUtil {
      * @param recursive  是否递归查询
      * @return MinioItem 列表
      */
-    public List getAllObjectsByPrefix(String bucketName, String prefix, boolean recursive) throws Exception {
+    public List<Item> getAllObjectsByPrefix(String bucketName, String prefix, boolean recursive) throws Exception {
         List<Item> list = new ArrayList<>();
         Iterable<Result<Item>> objectsIterator = minioClient.listObjects(ListObjectsArgs.builder().bucket(bucketName).prefix(prefix).recursive(recursive).build());
         if (objectsIterator != null) {
             Iterator<Result<Item>> iterator = objectsIterator.iterator();
-            if (iterator != null) {
-                while (iterator.hasNext()) {
-                    Result<Item> result = iterator.next();
-                    Item item = result.get();
-                    list.add(item);
-                }
+            while (iterator.hasNext()) {
+                Result<Item> result = iterator.next();
+                Item item = result.get();
+                list.add(item);
             }
         }
 
