@@ -41,6 +41,8 @@
         <module>multifuncollect-export-tools</module>
         <!-- 学习demo -->
         <module>multifuncollect-export-learndemo</module>
+        <!-- 深度学习demo -->
+        <module>multifuncollect-export-tensorflow</module>
     </modules>
 
     <!-- 打包方式：父模块默认为pom -->
@@ -153,6 +155,54 @@
                 <artifactId>ffmpeg</artifactId>
                 <version>5.0-1.5.7</version>
             </dependency>-->
+
+            <!-- https://mvnrepository.com/artifact/org.apache.hadoop/hadoop-common -->
+
+            <dependency>
+                <groupId>org.apache.hadoop</groupId>
+                <artifactId>hadoop-common</artifactId>
+                <version>2.10.2</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.hadoop</groupId>
+                <artifactId>hadoop-mapreduce-client-core</artifactId>
+                <version>2.10.2</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.hbase</groupId>
+                <artifactId>hbase-common</artifactId>
+                <version>2.4.17</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/org.apache.hbase/hbase-client -->
+            <dependency>
+                <groupId>org.apache.hbase</groupId>
+                <artifactId>hbase-client</artifactId>
+                <version>2.4.17</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/org.apache.hbase/hbase-client -->
+            <dependency>
+                <groupId>org.apache.hbase</groupId>
+                <artifactId>hbase-server</artifactId>
+                <version>2.4.17</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/org.apache.phoenix/phoenix-core -->
+           <!-- <dependency>
+                <groupId>org.apache.phoenix</groupId>
+                <artifactId>phoenix-core</artifactId>
+                <version>5.1.3</version>
+            </dependency>-->
+
+            <!-- https://mvnrepository.com/artifact/org.apache.phoenix/phoenix-client-hbase-2.4 -->
+            <dependency>
+                <groupId>org.apache.phoenix</groupId>
+                <artifactId>phoenix-client-hbase-2.4</artifactId>
+                <version>5.1.3</version>
+            </dependency>
 
 
         </dependencies>
