@@ -19,12 +19,14 @@ import org.springframework.util.Assert;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class MinioUploader extends Uploader implements InitializingBean {
 
@@ -142,4 +144,43 @@ public class MinioUploader extends Uploader implements InitializingBean {
         }
     }
 
+    public static void main(String[] args) {
+        File files = new File("D:\\asset\\asset_8ef16775e04ba436594b9325bfae5ca0");
+        List<File> filePaths =Arrays.stream(files.listFiles()).sorted(Comparator.comparing((b) -> Integer.parseInt(b.getName()))).toList();
+        mergeFiles(filePaths, "合并后的文件2.zip");
+    }
+
+    public static void mergeFiles(List<File> filePaths, String outputFilePath) {
+        FileOutputStream fos = null;
+        FileInputStream fis = null;
+        try {
+            fos = new FileOutputStream(new File(outputFilePath));
+            for (File filePath : filePaths) {
+                fis = new FileInputStream(filePath);
+                byte[] buffer = new byte[1024];
+                int len;
+                while ((len = fis.read(buffer)) != -1) {
+                    fos.write(buffer, 0, len);
+                }
+                fis.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (fos != null) {
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (fis != null) {
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 }

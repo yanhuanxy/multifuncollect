@@ -188,6 +188,7 @@ public class BatchDecomUtil {
         if (srcFile.isDirectory()) {
             ArchiveEntry arentry = aros.createArchiveEntry(srcFile,lastpath);
             aros.putArchiveEntry(arentry);
+            aros.closeArchiveEntry();
             File[] files= srcFile.listFiles();
             if(files != null){
                 for (File file : files) {
@@ -221,6 +222,7 @@ public class BatchDecomUtil {
         if (srcFile.isDirectory()) {
             ArchiveEntry arentry = taros.createArchiveEntry(srcFile,lastpath);
             taros.putArchiveEntry(arentry);
+            taros.closeArchiveEntry();
             File[] files= srcFile.listFiles();
             if(files != null){
                 for (File file : files) {
@@ -254,6 +256,7 @@ public class BatchDecomUtil {
         if (srcFile.isDirectory()) {
             ZipArchiveEntry arentry = (ZipArchiveEntry) zipos.createArchiveEntry(srcFile,lastpath);
             zipos.putArchiveEntry(arentry);
+            zipos.closeArchiveEntry();
             File[] files= srcFile.listFiles();
             if(files != null){
                 for (File file : files) {
@@ -303,6 +306,7 @@ public class BatchDecomUtil {
         if (srcFile.isDirectory()) {
             SevenZArchiveEntry entry = sevenzosfile.createArchiveEntry(srcFile, lastpath);
             sevenzosfile.putArchiveEntry(entry);
+            sevenzosfile.closeArchiveEntry();
             File[] files= srcFile.listFiles();
             if(files != null){
                 for (File file : files) {
@@ -652,13 +656,13 @@ public class BatchDecomUtil {
     }
 
     public static void main(String[] args) throws Exception {
-//        File srcFile = new File("C:\\Users\\yuany\\Desktop\\20190911-101705\\20190911-101705.zip");
-//        BatchCompressorType filetype = BatchCompressorType.SEVERNZ;
-        String filesavepath = "C:\\Users\\yuany\\Desktop\\test";
+//        File srcFile = new File("D:\\IDEAProjectGitlibWork\\asset\\2_1697773728066");
+//        BatchCompressorEnums filetype = BatchCompressorEnums.ZIP;
+        String filesavepath = "D:\\wj-software\\WeiChat Files\\WeChat Files\\wxid_0qmjpginendo22\\FileStorage\\File\\2023-10\\";
         boolean delete = false;
 //        compress(srcFile,filesavepath,filetype,delete);
 
-        File file = new File("C:\\Users\\yuany\\Desktop\\20190911-101705.zip");
+        File file = new File("D:\\wj-software\\WeiChat Files\\WeChat Files\\wxid_0qmjpginendo22\\FileStorage\\File\\2023-10\\取数口径.rar");
         Long starttime = System.currentTimeMillis();
         deCompress(file,filesavepath,delete);
         Long endtime = System.currentTimeMillis();

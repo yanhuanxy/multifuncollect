@@ -3,7 +3,7 @@ package com.yanhuanxy.multifunservice.message.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.yanhuanxy.multifundao.message.ProSmsTemplateMapper;
+import com.yanhuanxy.multifundao.mybatis.message.ProSmsTemplateMapper;
 import com.yanhuanxy.multifundomain.message.dto.ProSmsSendDTO;
 import com.yanhuanxy.multifundomain.message.dto.ProSmsTemplateDTO;
 import com.yanhuanxy.multifundomain.message.entity.ProSms;

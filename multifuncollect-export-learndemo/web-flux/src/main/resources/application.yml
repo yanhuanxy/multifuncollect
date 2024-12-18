@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: web-flux
+server:
+  port: 8080
+
+

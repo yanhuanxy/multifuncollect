@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yanhuanxy.multifuncommon.exception.BaseRuntimeException;
-import com.yanhuanxy.multifundao.dictionary.SysDictionaryMapper;
+import com.yanhuanxy.multifundao.mybatis.dictionary.SysDictionaryMapper;
 import com.yanhuanxy.multifundomain.dictionary.dto.SysDictionaryAddParam;
 import com.yanhuanxy.multifundomain.dictionary.dto.SysDictionaryEditParam;
 import com.yanhuanxy.multifundomain.dictionary.dto.SysDictionaryQueryParam;

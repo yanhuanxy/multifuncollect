@@ -1,7 +1,7 @@
 package com.yanhuanxy.multifunservice.putstorage.impl;
 
 
-import com.yanhuanxy.multifundao.desfrom.DesFormDataBatchUploadMapper;
+import com.yanhuanxy.multifundao.mybatis.desfrom.DesFormDataBatchUploadMapper;
 import com.yanhuanxy.multifunservice.putstorage.PutStorageStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

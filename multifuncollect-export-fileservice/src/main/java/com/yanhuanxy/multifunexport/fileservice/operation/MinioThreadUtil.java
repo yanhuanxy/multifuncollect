@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -35,7 +36,6 @@ public class MinioThreadUtil {
      * @throws Exception
      */
     public void batchDownload(MinioClientUtil minioClientUtil, MinioConfig minio, String minioSourceUrl, String localTargetUrl, boolean onlyFile) throws Exception {
-
         List<Item> minioFileList = minioClientUtil.getAllObjectsByPrefix(minio.getBucketName(), minioSourceUrl, onlyFile);
         int total = minioFileList.size();
         logger.info("总文件数： {}", total);
@@ -78,6 +78,9 @@ public class MinioThreadUtil {
             String objectName = item.objectName();
             // Create a local file with the same name as the object
             File file = new File(localTargetUrl.concat(File.separator).concat(objectName));
+            if(file.exists()){
+                continue;
+            }
             // Create parent directories if needed
             File parentFile = file.getParentFile();
             if(!parentFile.exists()){
@@ -142,9 +145,10 @@ public class MinioThreadUtil {
             File tmpFile = tmpLocalFileList.get(i);
             if(tmpFile.isFile()){
                 try (FileInputStream inputStream = new FileInputStream(tmpFile)) {
-                    minioClientUtil.putObject(minio.getBucketName(), (minioTargetUrl.concat("/").concat(tmpFile.getName())), inputStream, inputStream.available(), "application/octet-stream");
+                    String contentType = Files.probeContentType(tmpFile.toPath());
+                    minioClientUtil.putObject(minio.getBucketName(), (minioTargetUrl.concat("/").concat(tmpFile.getName())), inputStream, inputStream.available(), contentType);
                 }
-                logger.info("文件：{} 上传成功！线程: {} index: {}", tmpFile.getName(), Thread.currentThread().getName(), i);
+//                logger.info("文件：{} 上传成功！线程: {} index: {}", tmpFile.getName(), Thread.currentThread().getName(), i);
             }else if(tmpFile.isDirectory()){
                 // 迭代下载
                 logger.info("-------上传文件-------- {} 文件夹：{}", Thread.currentThread().getName(),  tmpFile.getPath());
@@ -155,27 +159,39 @@ public class MinioThreadUtil {
 
     public static void main(String[] args) {
         MinioConfig minio = new MinioConfig();
+//        minio.setBucketName("bmdp-project-man41b28d303719dc37b9cc97a7c638d9f5");
+//        minio.setAccessKey("minioadmin");
+//        minio.setEndpoint("http://192.168.0.137:9000");
+//        minio.setSecretKey("minioadmin");
+        minio.setBucketName("bmdp-project-man41b28d303719dc37b9cc97a7c638d9f5");
+        minio.setAccessKey("qiyunadmin");
+        minio.setEndpoint("https://asset.kelven.cn:9300");
+        minio.setSecretKey("qiyun@2023");
+
 
         try {
             MinioClient minioClient = MinioClient.builder().endpoint(minio.getEndpoint()).credentials(minio.getAccessKey(), minio.getSecretKey()).build();
             MinioClientUtil minioClientUtil = new MinioClientUtil(minioClient);
-            // 上传
-            String localSourceUrl = "D:\\IDEAProjectGitlibWork\\asset\\asset-web\\target\\test-classes\\asset";
-            String minioTargetUrl = "asset1";
+//            // 上传
+//            String localSourceUrl = "E:\\服务器备份\\asset\\bmdp-project-man41b28d303719dc37b9cc97a7c638d9f5";
+//            String minioTargetUrl = "bmdp-project-man41b28d303719dc37b9cc97a7c638d9f5";
             MinioThreadUtil minioThreadUtil = new MinioThreadUtil();
-            minioThreadUtil.batchUpload(minioClientUtil, minio, localSourceUrl, minioTargetUrl);
-
-            while (!minioThreadUtil.threadPool.isTerminated()){
-                long taskCount = minioThreadUtil.threadPool.getTaskCount();
-                long completedTaskCount = minioThreadUtil.threadPool.getCompletedTaskCount();
-                logger.info("任务总数:" + taskCount + "； 已经完成任务数:" + completedTaskCount);
-                if(taskCount == completedTaskCount){
-                    break;
-                }
-            }
+//            minioThreadUtil.batchUpload(minioClientUtil, minio, localSourceUrl, minioTargetUrl);
+//
+//            while (!minioThreadUtil.threadPool.isTerminated()){
+//                long taskCount = minioThreadUtil.threadPool.getTaskCount();
+//                long completedTaskCount = minioThreadUtil.threadPool.getCompletedTaskCount();
+//                logger.info("任务总数:" + taskCount + "； 已经完成任务数:" + completedTaskCount);
+//                if(taskCount == completedTaskCount){
+//                    break;
+//                }
+//                Thread.sleep(5000);
+//            }
             // 下载
-            String minioSourceUrl = "asset1/";
-            String localTargetUrl = "D:\\IDEAProjectGitlibWork\\asset\\asset-web\\target\\test-classes\\";
+            String minioSourceUrl = "asset/";
+            //
+//            minioSourceUrl = "bmdp-project-man41b28d303719dc37b9cc97a7c638d9f5";
+            String localTargetUrl = "E:\\服务器备份\\asset1";
             minioThreadUtil.batchDownload(minioClientUtil, minio, minioSourceUrl, localTargetUrl, Boolean.TRUE);
 
             while (!minioThreadUtil.threadPool.isTerminated()){

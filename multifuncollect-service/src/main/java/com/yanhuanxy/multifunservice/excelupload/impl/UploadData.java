@@ -5,7 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import com.yanhuanxy.multifuncommon.enums.FileTypeEnum;
 import com.yanhuanxy.multifuncommon.exception.BaseRuntimeException;
 import com.yanhuanxy.multifunexport.tools.util.BatchDecomUtil;
-import com.yanhuanxy.multifundao.desfrom.DesFormDataBatchUploadMapper;
+import com.yanhuanxy.multifundao.mybatis.desfrom.DesFormDataBatchUploadMapper;
 import com.yanhuanxy.multifundomain.desfrom.dto.DesTableColumnDTO;
 import com.yanhuanxy.multifundomain.excelupload.dto.UploadDataExcelDTO;
 import com.yanhuanxy.multifundomain.excelupload.dto.UploadDataFileDTO;

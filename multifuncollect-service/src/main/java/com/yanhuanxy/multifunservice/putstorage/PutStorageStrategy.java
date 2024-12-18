@@ -1,6 +1,6 @@
 package com.yanhuanxy.multifunservice.putstorage;
 
-import com.yanhuanxy.multifundao.desfrom.DesFormDataBatchUploadMapper;
+import com.yanhuanxy.multifundao.mybatis.desfrom.DesFormDataBatchUploadMapper;
 
 /**
  * 数据入库策略

@@ -36,25 +36,26 @@ spring:
       max-wait: 10000
       min-idle: 20
   # redis配置
-  redis:
-    database: 0
-    host: 192.168.0.222
-    password: qiyun@123
-    port: 6379
-    # 连接超时时间（毫秒）
-    timeout: 5000
-    # lettuce连接池配置
-    lettuce:
-      shutdown-timeout: 200
-      pool:
-        # 连接池中的最大连接数
-        max-active: 8
-        # 连接池阻塞等待时间（负值表示没有限制）
-        max-wait: -1
-        # 连接池中的最大空闲连接
-        max-idle: 8
-        # 连接池中最小空闲连接
-        min-idle: 0
+  data:
+    redis:
+      database: 12
+      host: 192.168.0.222
+      password: qiyun@123
+      port: 6379
+      # 连接超时时间（毫秒）
+      timeout: 5000
+      # lettuce连接池配置
+      lettuce:
+        shutdown-timeout: 200
+        pool:
+          # 连接池中的最大连接数
+          max-active: 8
+          # 连接池阻塞等待时间（负值表示没有限制）
+          max-wait: -1
+          # 连接池中的最大空闲连接
+          max-idle: 8
+          # 连接池中最小空闲连接
+          min-idle: 0
 # mybatis-plus 配置
 mybatis-plus:
   # MyBatis Mapper 所对应的 XML 文件位置

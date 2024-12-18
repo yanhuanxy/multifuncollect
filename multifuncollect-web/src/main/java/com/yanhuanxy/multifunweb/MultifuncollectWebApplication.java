@@ -9,9 +9,11 @@ import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactor
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 
 @ComponentScan({"com.yanhuanxy"})
-@MapperScan("com.yanhuanxy.multifundao.**")
+@MapperScan("com.yanhuanxy.multifundao.mybatis.**")
+@EnableRedisRepositories("com.yanhuanxy.multifundao.redis.**")
 @SpringBootApplication
 public class MultifuncollectWebApplication {
 

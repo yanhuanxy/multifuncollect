@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.yanhuanxy.multifundao.dictionary.SysDictionaryMapper">
+<mapper namespace="com.yanhuanxy.multifundao.mybatis.dictionary.SysDictionaryMapper">
 
     <select id="getDictionaryItemListByDictCode" resultType="com.yanhuanxy.multifundomain.dictionary.entity.SysDictionaryItem">
         select b.* from sys_dictionary a

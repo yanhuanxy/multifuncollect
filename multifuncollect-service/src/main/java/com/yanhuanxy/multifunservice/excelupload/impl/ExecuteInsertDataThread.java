@@ -1,7 +1,7 @@
 package com.yanhuanxy.multifunservice.excelupload.impl;
 
 import com.yanhuanxy.multifuncommon.exception.BaseRuntimeException;
-import com.yanhuanxy.multifundao.desfrom.DesFormDataBatchUploadMapper;
+import com.yanhuanxy.multifundao.mybatis.desfrom.DesFormDataBatchUploadMapper;
 import com.yanhuanxy.multifundomain.desfrom.dto.DesDataUploadBatchDTO;
 import com.yanhuanxy.multifundomain.desfrom.dto.DesTableColumnDTO;
 import com.yanhuanxy.multifundomain.excelupload.dto.UploadDataExcelDTO;
